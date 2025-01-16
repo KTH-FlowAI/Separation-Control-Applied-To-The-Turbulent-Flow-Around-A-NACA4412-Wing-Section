@@ -1,0 +1,237 @@
+"""
+Visualisation of the profiles 
+@yuningw
+"""
+import matplotlib.pyplot as plt
+import struct
+import numpy as np
+import pandas as pd
+from   tqdm import tqdm
+from   scipy import io as sio
+from   scipy.interpolate import interp1d
+from   scipy.integrate import quad
+from  lib.plot import *  
+from  lib.configs import *
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--x',default=0.75,type=float)
+parser.add_argument('--s',default="SS",type=str)
+args = parser.parse_args()
+plt_setUp()
+
+
+AOA = 11 
+Rec = 200
+fldr='../../database/stsdata/' 
+sides = ['SS',"PS"]
+
+#######################################
+# OVER SUCTION/PRESSURE SIDE 
+#######################################
+for caseName in data.keys():
+    name = data[caseName]['fileName']
+    fname= name_file(fldr,name,AOA,Rec,'SS')+'.mat'
+    data[caseName]['data_SS'] = sio.loadmat(fname)
+    print(f"[IO] DATA: {fname}")
+    
+    fname= name_file(fldr,name,AOA,Rec,'PS')+'.mat'
+    data[caseName]['data_PS'] = sio.loadmat(fname)
+    print(f"[IO] DATA: {fname}")
+
+
+
+#------------------------------------------
+# Integral quantities : Cf 
+#------------------------------------------
+control_region_cfg = {
+                    "xmin":0.25,
+                    "xmax":0.86,
+                    'color':cc.gray,
+                    "alpha":0.9}
+
+### ZOOM IN THE T.E For CF on S.S
+var = 'cf'
+fig,axs = plt.subplots(**single_fig_cfg)
+axins = inset_axes(axs, 
+                   width="100%", 
+                  height="60%",
+                  bbox_to_anchor=(  0.7,  0.6,   0.3,   0.4),
+                  bbox_transform=axs.transAxes,
+                          )
+x_start = 0.1,
+x_end  = 0.95
+x_c_zoom = 0.80
+var_Name = var_name_dict[var]['name']
+legend_list=[]
+for case_name in data.keys():
+  fig,axs = plot_integral_quantities(data[case_name]['data_SS'],fig,axs,
+                                    x_start,x_end,
+                                    var,var_Name,data[case_name]['style'])
+  axs.set(**var_name_dict[var]['axs'])
+  fig,axins = plot_integral_quantities(data[case_name]['data_SS'],fig,axins,
+                                      x_c_zoom,x_end,
+                                      var,var_Name,data[case_name]['style'],with_set=False)
+  legend_list.append(data[case_name]['label'])
+axs.grid(**grid_setup)
+axs.axvspan(**control_region_cfg)
+axs.axhline(0,**support_line1)
+axins.axhline(0,**support_line1)
+axs.legend(legend_list,
+            loc='upper center',
+            bbox_to_anchor=(0.5,.65,0.0,0.5),
+            ncol=len([k for k in data.keys()]),)
+fig.savefig(f'Figs/02-BL-DEVELP/SS_{var}_Inspection.pdf',
+              **figkw
+              )
+#----------------------
+# Pressure Side 
+#----------------------
+fig,axs = plt.subplots(**single_fig_cfg)
+var_Name = var_name_dict[var]['name']
+legend_list=[]
+for case_name in data.keys():
+  fig,axs = plot_integral_quantities(data[case_name]['data_PS'],fig,axs,
+                                    x_start,x_end,
+                                    var,var_Name,data[case_name]['style'])
+  axs.set(**var_name_dict[var]['axs'])
+  legend_list.append(data[case_name]['label'])
+axs.grid(**grid_setup)
+axs.axvspan(**control_region_cfg)
+axs.legend(legend_list,
+            loc='upper center',
+            bbox_to_anchor=(0.5,.65,0.0,0.5),
+            ncol=len([k for k in data.keys()]),)
+fig.savefig(f'Figs/02-BL-DEVELP/PS_{var}.pdf',
+              **figkw
+              )
+
+
+
+#------------------------------------------
+# Integral quantities : cp on both sides in one figure 
+#------------------------------------------
+
+### ZOOM IN THE T.E For CF on S.S
+var = 'cp'
+# fig,axs = plt.subplots(**single_fig_larger)
+fig,axs = plt.subplots(**single_fig_cfg)
+axins = inset_axes(axs,
+                          width="200%", 
+                          height="75%",
+                         bbox_to_anchor=(  0.75,  0.2,   0.3,   0.4),
+                          bbox_transform=axs.transAxes,
+                          )
+x_start = 0.0,
+x_end  = 1.0
+x_c_zoom_start = 0.6
+x_c_zoom_end = 1.0
+var_Name = var_name_dict[var]['name']
+legend_list=[]
+for case_name in data.keys():
+  fig,axs = plot_integral_quantities(data[case_name]['data_SS'],fig,axs,
+                                    x_start,x_end,
+                                    var,var_Name,data[case_name]['style'])
+  
+  fig,axs = plot_integral_quantities(data[case_name]['data_PS'],fig,axs,
+                                    x_start,x_end,
+                                    var,var_Name,data[case_name]['style'])
+  
+  fig,axins = plot_integral_quantities(data[case_name]['data_SS'],fig,axins,
+                                    x_c_zoom_start,x_c_zoom_end,
+                                    var,var_Name,data[case_name]['style'])
+  
+  fig,axins = plot_integral_quantities(data[case_name]['data_PS'],fig,axins,
+                                    x_c_zoom_start,x_c_zoom_end,
+                                    var,var_Name,data[case_name]['style'])
+  
+  legend_list.append(Line2D([0],[0],
+                            **data[case_name]['style'],
+                            label=data[case_name]['label']))
+axs.set(**var_name_dict[var]['axs'])
+# axins.set(**var_name_dict[var]['axs'])
+axins.set_xlabel("")
+axins.set_ylabel("")
+axins.set_aspect(0.25)
+axs.grid(**grid_setup)
+axs.axvspan(**control_region_cfg)
+
+# axs.axhline(0,**support_line1)
+# axins.axhline(0,**support_line1)
+# axins.axvspan(**control_region_cfg)
+
+axs.legend(handles=legend_list,
+            loc='upper center',
+            bbox_to_anchor=(0.5,.65,0.0,0.5),
+            ncol=len([k for k in data.keys()]),)
+fig.savefig(f'Figs/02-BL-DEVELP/{var}_BothSides.pdf',
+              **figkw
+              )
+
+
+
+
+#------------------------------------------
+# Integral quantities : Others on both sides
+#------------------------------------------
+
+VarList =[
+          'beta','Retheta',"Retau","H12",
+          ]
+for side in sides: 
+  for var in VarList:
+    fig,axs = plt.subplots(**single_fig_cfg)
+    x_c = 0.16
+    var_Name = var_name_dict[var]
+    legend_list=[]
+    for case_name in data.keys():
+      fig,axs = plot_integral_quantities(data[case_name][f'data_{side}'],
+                                        fig,axs,x_c,0.95,
+                                        var,var_Name,data[case_name]['style'])
+      legend_list.append(data[case_name]['label'])
+    axs.set(**var_name_dict[var]['axs'])
+    axs.grid(**grid_setup)
+    axs.axvspan(**control_region_cfg)
+    # axs.legend(legend_list,loc='best')
+    axs.legend(legend_list,
+            loc='upper center',
+            bbox_to_anchor=(0.5,.65,0.0,0.5),
+            ncol=len([k for k in data.keys()]),)
+    fig.savefig(f'Figs/02-BL-DEVELP/{side}_{var}.pdf',
+                **figkw
+                )
+
+
+
+
+
+#######################################
+# Inspect the Separation points 
+########################################
+
+side = 'SS'
+# We only Care about the suction side 
+VarList =['cf',]
+for var in VarList:
+  fig,axs = plt.subplots(**single_fig_cfg)
+  # axins = zoomed_inset_axes(axs,zoom=3,loc='lower center')
+  
+  x_c = 0.1
+  var_Name = var_name_dict[var]
+  legend_list=[]
+  for il, case_name in enumerate(data.keys()):
+    cf = data[case_name][f'data_{side}'][var].squeeze()
+    xx = data[case_name][f'data_{side}']['xc'].squeeze()
+    ind = np.where((cf>=0))[0][-1]-2
+    x_loc_sep =xx[ind]
+    print(x_loc_sep)
+    axs.plot(il+1,x_loc_sep,"o",c=data[case_name]['style']['c'],markersize=20)
+    legend_list.append(data[case_name]['label'])
+axs.grid(**grid_setup)
+axs.set(**{'xlabel':"CASE","ylabel":"Separation Point (x/c)",
+          "title":"Separation Assessment " + f"($C_f < 0$)"})
+axs.legend(legend_list,loc='lower right')
+fig.savefig(f'Figs/01-CTRL-EFFECT/{side}_Separation_Points.pdf',
+              **figkw
+              )
+
