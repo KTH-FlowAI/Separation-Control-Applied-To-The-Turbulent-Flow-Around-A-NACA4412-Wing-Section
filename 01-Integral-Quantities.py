@@ -52,16 +52,24 @@ control_region_cfg = {
 
 ### ZOOM IN THE T.E For CF on S.S
 var = 'cf'
-fig,axs = plt.subplots(**single_fig_cfg)
+# fig,axs = plt.subplots(**single_fig_cfg)
+fig,axss = plt.subplots(**double_fig_larger)
+axs = axss[0]
 axins = inset_axes(axs, 
-                   width="100%", 
-                  height="60%",
+                   width="120%", 
+                  height="50%",
                   bbox_to_anchor=(  0.7,  0.6,   0.3,   0.4),
                   bbox_transform=axs.transAxes,
                           )
 x_start = 0.1,
 x_end  = 0.95
 x_c_zoom = 0.80
+control_region_cfg2 = {
+                    "xmin":x_c_zoom,
+                    "xmax":0.86,
+                    'color':cc.gray,
+                    "alpha":0.9}
+
 var_Name = var_name_dict[var]['name']
 legend_list=[]
 for case_name in data.keys():
@@ -74,20 +82,25 @@ for case_name in data.keys():
                                       var,var_Name,data[case_name]['style'],with_set=False)
   legend_list.append(data[case_name]['label'])
 axs.grid(**grid_setup)
+axs.set_title('(a) S.S',**title_setup)
 axs.axvspan(**control_region_cfg)
+axins.axvspan(**control_region_cfg2)
 axs.axhline(0,**support_line1)
 axins.axhline(0,**support_line1)
-axs.legend(legend_list,
-            loc='upper center',
-            bbox_to_anchor=(0.5,.65,0.0,0.5),
-            ncol=len([k for k in data.keys()]),)
-fig.savefig(f'Figs/02-BL-DEVELP/SS_{var}_Inspection.pdf',
-              **figkw
-              )
+
+# axs.legend(legend_list,
+#             loc='upper center',
+#             bbox_to_anchor=(0.5,.5,0.0,0.5),
+#             ncol=len([k for k in data.keys()]),)
+
+# fig.savefig(f'Figs/02-BL-DEVELP/SS_{var}_Inspection.jpg',
+#               **figkw
+#               )
 #----------------------
 # Pressure Side 
 #----------------------
-fig,axs = plt.subplots(**single_fig_cfg)
+# fig,axs = plt.subplots(**single_fig_cfg)
+axs = axss[1]
 var_Name = var_name_dict[var]['name']
 legend_list=[]
 for case_name in data.keys():
@@ -98,11 +111,17 @@ for case_name in data.keys():
   legend_list.append(data[case_name]['label'])
 axs.grid(**grid_setup)
 axs.axvspan(**control_region_cfg)
-axs.legend(legend_list,
-            loc='upper center',
-            bbox_to_anchor=(0.5,.65,0.0,0.5),
-            ncol=len([k for k in data.keys()]),)
-fig.savefig(f'Figs/02-BL-DEVELP/PS_{var}.pdf',
+axs.set_ylabel(' ')
+axs.set_title('(b) P.S',**title_setup)
+
+# axs.legend(legend_list,
+#             loc='upper center',
+#             bbox_to_anchor=(0.5,.65,0.0,0.5),
+#             ncol=len([k for k in data.keys()]),)
+fig.savefig(f'Figs/02-BL-DEVELP/{var}_BothSides.jpg',
+              **figkw
+              )
+fig.savefig(f'Figs/02-BL-DEVELP/{var}_BothSides.pdf',
               **figkw
               )
 
@@ -124,8 +143,15 @@ axins = inset_axes(axs,
                           )
 x_start = 0.0,
 x_end  = 1.0
-x_c_zoom_start = 0.6
-x_c_zoom_end = 1.0
+x_c_zoom_start = 0.75
+x_c_zoom_end = 0.95
+
+control_region_cfg2 = {
+                    "xmin":x_c_zoom_start,
+                    "xmax":0.86,
+                    'color':cc.gray,
+                    "alpha":0.9}
+
 var_Name = var_name_dict[var]['name']
 legend_list=[]
 for case_name in data.keys():
@@ -155,20 +181,20 @@ axins.set_ylabel("")
 axins.set_aspect(0.25)
 axs.grid(**grid_setup)
 axs.axvspan(**control_region_cfg)
+axins.axvspan(**control_region_cfg2)
+axs.axhline(0,**support_line1)
+axins.axhline(0,**support_line1)
 
-# axs.axhline(0,**support_line1)
-# axins.axhline(0,**support_line1)
-# axins.axvspan(**control_region_cfg)
-
-axs.legend(handles=legend_list,
-            loc='upper center',
-            bbox_to_anchor=(0.5,.65,0.0,0.5),
-            ncol=len([k for k in data.keys()]),)
+# axs.legend(handles=legend_list,
+#             loc='upper center',
+#             bbox_to_anchor=(0.5,.65,0.0,0.5),
+#             ncol=len([k for k in data.keys()]),)
+fig.savefig(f'Figs/02-BL-DEVELP/{var}_BothSides.jpg',
+              **figkw
+              )
 fig.savefig(f'Figs/02-BL-DEVELP/{var}_BothSides.pdf',
               **figkw
               )
-
-
 
 
 #------------------------------------------
@@ -178,33 +204,47 @@ fig.savefig(f'Figs/02-BL-DEVELP/{var}_BothSides.pdf',
 VarList =[
           'beta','Retheta',"Retau","H12",
           ]
-for side in sides: 
-  for var in VarList:
-    fig,axs = plt.subplots(**single_fig_cfg)
+AlphaList = [['(a)',"(b)","(c)","(d)"],["(e)","(f)","(g)","(h)"]]
+for jl, side in enumerate(sides): 
+  fig,axss = plt.subplots(**quadra_fig_larger)
+  for il, var in enumerate(VarList):
+    axs=axss[il]
+    # fig,axs = plt.subplots(**single_fig_cfg)
     x_c = 0.16
     var_Name = var_name_dict[var]
     legend_list=[]
     for case_name in data.keys():
+      if 'ref'  in case_name:
+        x_end = 0.86
+      else:
+        x_end = 0.95
       fig,axs = plot_integral_quantities(data[case_name][f'data_{side}'],
-                                        fig,axs,x_c,0.95,
+                                        fig,axs,x_c,x_end,
                                         var,var_Name,data[case_name]['style'])
       legend_list.append(data[case_name]['label'])
     axs.set(**var_name_dict[var]['axs'])
     axs.grid(**grid_setup)
     axs.axvspan(**control_region_cfg)
+    axs.set_title(AlphaList[jl][il] + f" {side_text[side]}",**title_setup)
+    # if il !=len(VarList)-1: 
+    #   axs.set_xlabel('')
     # axs.legend(legend_list,loc='best')
-    axs.legend(legend_list,
-            loc='upper center',
-            bbox_to_anchor=(0.5,.65,0.0,0.5),
-            ncol=len([k for k in data.keys()]),)
-    fig.savefig(f'Figs/02-BL-DEVELP/{side}_{var}.pdf',
+    # axs.legend(legend_list,
+    #         loc='upper center',
+    #         bbox_to_anchor=(0.5,.65,0.0,0.5),
+    #         ncol=len([k for k in data.keys()]),)
+  fig.subplots_adjust(**{"hspace":0.4,"wspace":0.3})
+  fig.savefig(f'Figs/02-BL-DEVELP/{side}_{il+1}VARS.jpg',
+                **figkw
+                )
+  fig.savefig(f'Figs/02-BL-DEVELP/{side}_{il+1}VARS.pdf',
                 **figkw
                 )
 
 
 
 
-
+quit()
 #######################################
 # Inspect the Separation points 
 ########################################
@@ -231,7 +271,7 @@ axs.grid(**grid_setup)
 axs.set(**{'xlabel':"CASE","ylabel":"Separation Point (x/c)",
           "title":"Separation Assessment " + f"($C_f < 0$)"})
 axs.legend(legend_list,loc='lower right')
-fig.savefig(f'Figs/01-CTRL-EFFECT/{side}_Separation_Points.pdf',
+fig.savefig(f'Figs/01-CTRL-EFFECT/{side}_Separation_Points.jpg',
               **figkw
               )
 

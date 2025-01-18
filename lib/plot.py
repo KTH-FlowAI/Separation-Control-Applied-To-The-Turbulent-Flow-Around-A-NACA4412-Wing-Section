@@ -31,11 +31,12 @@ def plt_setUp():
     plt.rc("font",family = "serif")
     plt.rc("text",usetex = "true")
     plt.rc("font",size = 30)
-    plt.rc("axes",labelsize = 30, linewidth = 2)
-    plt.rc("legend",fontsize= 20, handletextpad = 0.1)
-    plt.rc("xtick",labelsize = 25)
-    plt.rc("ytick",labelsize = 25)
+    plt.rc("axes",labelsize = 35, linewidth = 2)
+    plt.rc("legend",fontsize= 15, handletextpad = 0.1)
+    plt.rc("xtick",labelsize = 18)
+    plt.rc("ytick",labelsize = 18)
     return 
+
 
 
 # Setup for output 
@@ -55,12 +56,15 @@ formatter3.set_powerlimits([-2,4])
 ## Syntax for set log grid 
 locmin = LogLocator(base=10,subs=np.arange(0,10), numticks=10)
 
-
+title_setup ={  
+                'loc':'left',
+                'pad':22,
+                } 
 
 single_fig_cfg = {
                 'ncols':1,
                 'nrows':1,
-                'figsize':(8,6)
+                'figsize':(8,8)
                   }
 
 single_fig_larger = {
@@ -69,18 +73,25 @@ single_fig_larger = {
                 'figsize':(12,6)
                   }
 
-
 double_fig_larger = {
                 'ncols':2,
                 'nrows':1,
-                'figsize':(8,18)
+                'figsize':(12,8),
+                # 'sharey':True
+                  }
+
+quadra_fig_larger = {
+                'ncols':4,
+                'nrows':1,
+                'figsize':(26,6),
+                # 'sharex':True
                   }
 
 ## Support lines 
 
-support_line1 = {'color':cc.pink,
+support_line1 = {'color':cc.grays,
                 'linestyle':'-.',
-                'linewidth':3.0,
+                'linewidth':2.0,
                 }
 
 ## Grid setup 
@@ -91,6 +102,11 @@ grid_setup = {
                 "alpha":1.0,
                 }
 
+side_text = {
+    "SS":f"S.S",
+    "PS":f"P.S",
+             
+             }
 
 var_name_dict={
               'Uinner':{"name":r"$U^+_t$",
@@ -170,9 +186,9 @@ var_name_dict={
               'beta'   :{"name":r"$\beta$",
                           "axs":{
                             'xlabel':r'$x/c$',
-                            "xlim":[0.11,0.86],
+                            "xlim":[0.11,0.95],
                             'ylabel':r'$\beta$',
-                            'yscale':"log",
+                            'yscale':"symlog",
                           }
                           },
               'Retau'  :{"name":r"$Re_{\tau}$",

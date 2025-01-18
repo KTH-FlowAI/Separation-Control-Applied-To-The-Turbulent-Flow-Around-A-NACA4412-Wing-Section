@@ -26,11 +26,7 @@ AOA = 11
 Rec = 200
 fldr='../../database/stsdata/' 
 sides = ['SS',"PS"]
-side_text = {
-    "SS":f"S.S",
-    "PS":f"P.S",
-             
-             }
+
 #######################################
 # OVER SUCTION/PRESSURE SIDE 
 #######################################

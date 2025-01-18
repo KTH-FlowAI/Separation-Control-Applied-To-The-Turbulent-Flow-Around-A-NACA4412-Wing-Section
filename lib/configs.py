@@ -16,13 +16,15 @@ from lib.plot import cc
 
 lw1     = 3.0 
 lw2     = 1.2 
-mksize1 = 6.0 
+mksize1 = 4.0 
 ls0     = ':'
 ls1     = '--'
 ls2     = '-'
+ls3     = ':'
 mktype1 = 'x'
 mktype2 = 'x'
 mktype3 = 's'
+mktype4 = 'D'
 
 cs  = [cc.deepgreen,cc.blue,cc.purple,cc.yellow,cc.red,cc.pink]
 ms = ['o','D','v','s','^']
@@ -52,23 +54,36 @@ data=     {
                             'c':cc.blue,
                             'linestyle':ls1,
                             'marker':mktype2,
-                            'markersize':6.0,
+                            'markersize':mksize1,
                             'fillstyle':'none',
                             },
-                    'label':'CASE1',
+                    'label':'Case A',
                     },
         
+        'control1':{
+                    'fileName':'CTRL_025-086XC_0.50%Uinf_SS-SUCTION_PS-BLOWING/',
+                    'style':{
+                            'lw':lw2,
+                            'c':cc.yellow,
+                            'linestyle':ls2,
+                            'marker':mktype3,
+                            'markersize':mksize1,
+                            'fillstyle':'none',
+                            },
+                    'label':'Case B',
+                    },
+
         'control2':{
                     'fileName':'CTRL_025-086XC_1.00%Uinf_SS-SUCTION_PS-BLOWING/',
                     'style':{
                             'lw':lw2,
                             'c':cc.red,
-                            'linestyle':ls2,
-                            'marker':mktype3,
-                            'markersize':6.0,
+                            'linestyle':ls3,
+                            'marker':mktype4,
+                            'markersize':mksize1,
                             'fillstyle':'none',
                             },
-                    'label':'CASE2',
+                    'label':'Case C',
                     },
       }
 
