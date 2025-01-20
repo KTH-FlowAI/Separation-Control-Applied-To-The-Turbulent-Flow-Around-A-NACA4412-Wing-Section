@@ -31,7 +31,7 @@ Image_List = ['2D-CTRL.png',
               'MESH-CLOSE.png',
               ]
 
-org_path = os.getcwd()
+org_path ='Figs/99-SNAPSHOTS/'
 save_path = 'Figs/99-SNAPSHOTS/'
 
 for image_name in Image_List:
