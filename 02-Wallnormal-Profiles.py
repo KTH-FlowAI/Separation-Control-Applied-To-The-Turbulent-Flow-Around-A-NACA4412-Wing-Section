@@ -26,6 +26,8 @@ AOA = 11
 Rec = 200
 fldr='../../database/stsdata/' 
 sides = ['SS',"PS"]
+AlphaList = [['(a)',"(b)","(c)","(d)"],["(e)","(f)","(g)","(h)"]]
+
 
 #######################################
 # OVER SUCTION/PRESSURE SIDE 
@@ -40,7 +42,9 @@ for caseName in data.keys():
     data[caseName]['data_PS'] = sio.loadmat(fname)
     print(f"[IO] DATA: {fname}")
 
-
+"""
+Mean Velocity profiles at different streamwise location Inner and outer scale 
+"""
 
 VarList =['U','V']
 scales=['inner','outer']
@@ -76,3 +80,4 @@ for scale in scales:
             fig.savefig(f'Figs/03-STATS/{side}_{var}_{int(x_c*100)}_{scale}.pdf',
                     **{"bbox_inches":'tight','dpi':300}
                     )
+

@@ -64,7 +64,7 @@ title_setup ={
 single_fig_cfg = {
                 'ncols':1,
                 'nrows':1,
-                'figsize':(8,8)
+                'figsize':(6,6)
                   }
 
 single_fig_larger = {
@@ -79,6 +79,14 @@ double_fig_larger = {
                 'figsize':(12,8),
                 # 'sharey':True
                   }
+
+triple_fig_larger = {
+                'ncols':3,
+                'nrows':1,
+                'figsize':(26,6),
+                # 'sharex':True
+                  }
+
 
 quadra_fig_larger = {
                 'ncols':4,
