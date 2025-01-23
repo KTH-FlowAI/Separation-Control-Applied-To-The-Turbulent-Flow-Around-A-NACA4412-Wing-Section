@@ -157,6 +157,7 @@ axs.set_xlabel(r'CASE',fontsize = 20)
 axs.legend(loc='upper left',ncol=2)
 fig.tight_layout()
 fig.savefig('Figs/01-CTRL-EFFECT/cl_cd_bar.jpg',**figkw)
+fig.savefig('Figs/01-CTRL-EFFECT/cl_cd_bar.pdf',**figkw)
 
 
 ################
@@ -170,19 +171,19 @@ for il, case in enumerate(data.keys()):
     style_dict = data[case]['style']
     labelName  = data[case]['label']
     
-    # if 'Case C' not in labelName:
-    axs.plot(df['cd'][il],df['cl'][il],
-            linestyle='none',
-            marker=style_dict['marker'],
-            c=style_dict['c'],
-            markersize=25)
-    legend_list.append(Line2D([0],[0],
-                          linestyle='none',
-                          marker=style_dict['marker'],
-                          c=style_dict['c'],
-                          markersize=10,
-                          label=labelName
-                                ))
+    if 'Case C' not in labelName:
+      axs.plot(df['cd'][il],df['cl'][il],
+              linestyle='none',
+              marker=style_dict['marker'],
+              c=style_dict['c'],
+              markersize=25)
+      legend_list.append(Line2D([0],[0],
+                            linestyle='none',
+                            marker=style_dict['marker'],
+                            c=style_dict['c'],
+                            markersize=10,
+                            label=labelName
+                                  ))
 # axs.xaxis.set_major_formatter(formatter2)
 axs.grid(**grid_setup)
 axs.set(**{
@@ -204,6 +205,7 @@ axs.legend(
 axs.grid(which='major')
 fig.tight_layout()
 fig.savefig('Figs/01-CTRL-EFFECT/cl_VS_cd.jpg',**figkw)
+fig.savefig('Figs/01-CTRL-EFFECT/cl_VS_cd.pdf',**figkw)
 
 
 #######################################
@@ -267,6 +269,9 @@ axs.legend(
         prop={'size':15}
           )
 fig.savefig(f'Figs/01-CTRL-EFFECT/{side}_Separation_Points.jpg',
+              **figkw
+              )
+fig.savefig(f'Figs/01-CTRL-EFFECT/{side}_Separation_Points.pdf',
               **figkw
               )
 

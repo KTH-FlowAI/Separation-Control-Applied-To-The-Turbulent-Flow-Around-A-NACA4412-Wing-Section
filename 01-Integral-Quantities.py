@@ -56,9 +56,9 @@ var = 'cf'
 fig,axss = plt.subplots(**double_fig_larger)
 axs = axss[0]
 axins = inset_axes(axs, 
-                   width="120%", 
-                  height="50%",
-                  bbox_to_anchor=(  0.7,  0.6,   0.3,   0.4),
+                   width="130%", 
+                  height="35%",
+                  bbox_to_anchor=(  0.7,  0.55,   0.3,   0.4),
                   bbox_transform=axs.transAxes,
                           )
 x_start = 0.1,
@@ -75,16 +75,19 @@ legend_list=[]
 for case_name in data.keys():
   fig,axs = plot_integral_quantities(data[case_name]['data_SS'],fig,axs,
                                     x_start,x_end,
-                                    var,var_Name,data[case_name]['style'])
+                                    var,var_Name,data[case_name]['style'],interval=3)
   axs.set(**var_name_dict[var]['axs'])
   fig,axins = plot_integral_quantities(data[case_name]['data_SS'],fig,axins,
-                                      x_c_zoom,x_end,
+                                      x_c_zoom,0.99,
                                       var,var_Name,data[case_name]['style'],with_set=False)
   legend_list.append(data[case_name]['label'])
+axs.yaxis.set_major_formatter(formatter2)
 axs.grid(**grid_setup)
-axs.set_title('(a) S.S',**title_setup)
+axs.set_title('S.S',)
 axs.axvspan(**control_region_cfg)
 axins.axvspan(**control_region_cfg2)
+axins.set_ylim([-0.001,0.002])
+axins.yaxis.set_major_formatter(formatter2)
 axs.axhline(0,**support_line1)
 axins.axhline(0,**support_line1)
 
@@ -106,14 +109,17 @@ legend_list=[]
 for case_name in data.keys():
   fig,axs = plot_integral_quantities(data[case_name]['data_PS'],fig,axs,
                                     x_start,x_end,
-                                    var,var_Name,data[case_name]['style'])
+                                    var,var_Name,data[case_name]['style'],
+                                    interval=3,
+                                    )
   axs.set(**var_name_dict[var]['axs'])
   legend_list.append(data[case_name]['label'])
 axs.grid(**grid_setup)
 axs.axvspan(**control_region_cfg)
 axs.set_ylabel(' ')
-axs.set_title('(b) P.S',**title_setup)
-
+axs.set_title('P.S',)
+axs.yaxis.set_major_formatter(formatter2)
+fig.subplots_adjust(wspace=0.1)
 # axs.legend(legend_list,
 #             loc='upper center',
 #             bbox_to_anchor=(0.5,.65,0.0,0.5),
@@ -200,9 +206,17 @@ fig.savefig(f'Figs/02-BL-DEVELP/{var}_BothSides.pdf',
 #------------------------------------------
 # Integral quantities : Others on both sides
 #------------------------------------------
+plt.rc("xtick",labelsize = 30)
+plt.rc("ytick",labelsize = 30)
+plt.rc("font",size = 35)
+
+
 
 VarList =[
-          'beta','Retheta',"Retau","H12",
+          'beta',
+          'Retheta',
+          "Retau",
+          "H12",
           ]
 AlphaList = [['(a)',"(b)","(c)","(d)"],["(e)","(f)","(g)","(h)"]]
 for jl, side in enumerate(sides): 
@@ -218,25 +232,62 @@ for jl, side in enumerate(sides):
         x_end = 0.86
       else:
         x_end = 0.95
+      style_dict = data[case_name]['style']
+      style_dict['lw']  = 3.5
+      style_dict['markersize']  = 9.0
       fig,axs = plot_integral_quantities(data[case_name][f'data_{side}'],
                                         fig,axs,x_c,x_end,
-                                        var,var_Name,data[case_name]['style'])
+                                        var,var_Name,style_dict,
+                                        interval=4
+                                        )
+      
       legend_list.append(data[case_name]['label'])
     axs.set(**var_name_dict[var]['axs'])
     axs.grid(**grid_setup)
     axs.axvspan(**control_region_cfg)
     axs.set_title(AlphaList[jl][il] + f" {side_text[side]}",**title_setup)
-    # if il !=len(VarList)-1: 
-    #   axs.set_xlabel('')
-    # axs.legend(legend_list,loc='best')
-    # axs.legend(legend_list,
-    #         loc='upper center',
-    #         bbox_to_anchor=(0.5,.65,0.0,0.5),
-    #         ncol=len([k for k in data.keys()]),)
-  fig.subplots_adjust(**{"hspace":0.4,"wspace":0.3})
+  fig.subplots_adjust(**{"hspace":0.4,"wspace":0.2})
   fig.savefig(f'Figs/02-BL-DEVELP/{side}_{il+1}VARS.jpg',
                 **figkw
                 )
   fig.savefig(f'Figs/02-BL-DEVELP/{side}_{il+1}VARS.pdf',
                 **figkw
                 )
+
+
+VarList = [
+          "cf",
+          "cp",
+          "beta",
+          "Retheta",
+          "Retau",
+          "H12"]
+
+xLoc  = 0.75 
+for jl, side in enumerate(sides): 
+  sum_table = {
+        'case':[],
+        'cf':[],
+        'cp':[],
+        'beta':[],
+        'Retheta':[],
+        "Retau":[],
+        "H12":[],
+            }
+  for kl, case_name in enumerate(data.keys()):
+    sum_table['case'].append(data[case_name][f'label'])
+    for il, var in enumerate(VarList):
+        
+        data_ = data[case_name][f'data_{side}']
+        
+        xx = data_['xc'][0,:]
+        ind = np.where(data_['xc'][0,:] > xLoc)[0][0]
+        x_loc =xx[ind]
+        print(ind,x_loc)
+        var_x = data_[var][0,ind]
+        print(f"Case {case_name} At x/c = {x_loc}: {var} = {var_x}")
+        sum_table[var].append(var_x)
+    
+  df = pd.DataFrame(sum_table)
+  df.to_csv(f'Quantities_{side}.csv',float_format='%.4f')
+      

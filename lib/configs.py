@@ -15,8 +15,8 @@ LINE   === CONTROL METHOD
 from lib.plot import cc
 
 lw1     = 3.0 
-lw2     = 1.2 
-mksize1 = 4.0 
+lw2     = 2.0 
+mksize1 = 7.5 
 ls0     = ':'
 ls1     = '--'
 ls2     = '-'

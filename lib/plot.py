@@ -33,8 +33,8 @@ def plt_setUp():
     plt.rc("font",size = 30)
     plt.rc("axes",labelsize = 35, linewidth = 2)
     plt.rc("legend",fontsize= 15, handletextpad = 0.1)
-    plt.rc("xtick",labelsize = 18)
-    plt.rc("ytick",labelsize = 18)
+    plt.rc("xtick",labelsize = 22)
+    plt.rc("ytick",labelsize = 22)
     return 
 
 
@@ -54,6 +54,10 @@ formatter3 = ticker.ScalarFormatter(useMathText=True,
                                     useLocale=True)
 formatter3.set_powerlimits([-2,4])
 
+# formatter3 = ticker.ScalarFormatter(useMathText=True,
+#                                     useLocale=True)
+# formatter3.set_powerlimits([-3,4])
+
 ## Syntax for set log grid 
 locmin = LogLocator(base=10,subs=np.arange(0,10), numticks=10)
 
@@ -71,7 +75,7 @@ single_fig_smaller = {
 single_fig_cfg = {
                 'ncols':1,
                 'nrows':1,
-                'figsize':(6,6)
+                'figsize':(8,8)
                   }
 
 single_fig_larger = {
@@ -83,7 +87,7 @@ single_fig_larger = {
 double_fig_larger = {
                 'ncols':2,
                 'nrows':1,
-                'figsize':(12,8),
+                'figsize':(16,8),
                 # 'sharey':True
                   }
 
@@ -98,7 +102,8 @@ triple_fig_larger = {
 quadra_fig_larger = {
                 'ncols':4,
                 'nrows':1,
-                'figsize':(26,6),
+                # 'figsize':(24,6),
+                'figsize':(40,7),
                 # 'sharex':True
                   }
 
@@ -162,26 +167,62 @@ var_name_dict={
                         
                         },
 
-              'uu'     :{ "name":r"$\overline{u^2_t}^+$",
+              'uuinner'     :{ "name":r"$\overline{u^2_t}^+$",
                           "axs":{
                             'xlabel':r'$y^+_n$',
                             'xscale':"log",
                             'ylabel':r"$\overline{u^2_t}^+$",
                           },
                           },
+              'uuouter'     :{ "name":r"$\overline{u^2_t}/U^2_e$",
+                          "axs":{
+                            'xlabel':r'$y^+_n$',
+                            'xscale':"log",
+                            'ylabel':r"$\overline{u^2_t}/U^2_e$",
+                          },
+                          },
 
-              'vv'     :{"name":r"$\overline{v^2_n}^+$",
+              'vvinner'     :{"name":r"$\overline{v^2_n}^+$",
                           "axs":{
                             'xlabel':r'$y^+_n$',
                             'xscale':"log",
                             'ylabel':r"$\overline{v^2_n}^+$",
                           }
                           },
-              'uv'     :{"name":   r"$-\overline{u_tv_n}^+$",
+              'vvouter'     :{"name":r"$\overline{v^2_n}/U^2_e$",
+                          "axs":{
+                            'xlabel':r'$y^+_n$',
+                            'xscale':"log",
+                            'ylabel':r"$\overline{v^2_n}/U^2_e$",
+                          }
+                          },
+              'wwinner'     :{"name":r"$\overline{w^2_n}^+$",
+                          "axs":{
+                            'xlabel':r'$y^+_n$',
+                            'xscale':"log",
+                            'ylabel':r"$\overline{w^2_n}^+$",
+                          }
+                          },
+              'wwouter'     :{"name":r"$\overline{w^2_n}/U^2_e$",
+                          "axs":{
+                            'xlabel':r'$y^+_n$',
+                            'xscale':"log",
+                            'ylabel':r"$\overline{w^2_n}/U^2_e$",
+                          }
+                          },
+
+              'uvinner'     :{"name":   r"$-\overline{u_tv_n}^+$",
                           "axs":{
                             'xlabel':r'$y^+_n$',
                             'xscale':"log",
                             'ylabel':r"$-\overline{u_tv_n}^+$",
+                          }
+                          },
+              'uvouter'     :{"name":   r"$-\overline{u_tv_n}/U^2_e$",
+                          "axs":{
+                            'xlabel':r'$y^+_n$',
+                            'xscale':"log",
+                            'ylabel':r"$-\overline{u_tv_n}/U^2_e$",
                           }
                           },
 
@@ -242,47 +283,63 @@ def plot_Vel(d,fig,axs,x_c,var,
               var_Name,
               style,grid_setup,
               scale='inner',
-              interval=20):
+              interval=30):
   xc = d['xc'].squeeze()
   idx = np.where(xc>=x_c)[0][0]
   
   if scale == 'inner':
     utau  = d['utau'][0,idx]
     lstar = d['lstar'][0,idx]
-    axs.plot(d['yn'][idx,::interval]/lstar,d[var][idx,::interval]/utau,**style)
+    axs.plot(d['yn'][idx,:]/lstar,d[var][idx,:]/utau,
+            **style,
+            markevery=interval)
   
   elif scale == 'outer':
     Ue  = d['Ue'][0,idx]
     lstar = d['lstar'][0,idx]
-    axs.plot(d['yn'][idx,::interval]/lstar,d[var][idx,::interval]/Ue,**style)
+    axs.plot(d['yn'][idx,:]/lstar,d[var][idx,:]/Ue,
+            **style,
+            markevery=interval)
   
   
     
   axs.grid(**grid_setup)
   return fig,axs
 
-def plot_Reynolds_Stress(d,fig,axs,x_c,var,var_Name,style,grid_setup):
+
+def plot_ReynoldStress(d,fig,axs,x_c,var,
+              var_Name,
+              style,grid_setup,
+              scale='inner',
+              interval=30):
   xc = d['xc'].squeeze()
   idx = np.where(xc>=x_c)[0][0]
-  # print(f"x/c={x_c};idx={idx};x/c = {xc[idx]}")
-  utau  = d['utau'][0,idx]
-  lstar = d['lstar'][0,idx]
-  axs.plot(d['yn'][idx,:]/lstar,np.abs(d[var][idx,:]/utau**2),**style)
-  axs.set(**{"xlabel":r"$y^+_{n}$",
-                    'xlim':[3e-1,500],
-                    "xscale":'log',
-                    "ylabel":var_Name,
-                    'title':r"$x/c = $" + f'{x_c}'})
   
-  axs.xaxis.set_minor_locator(locmin)
-  axs.xaxis.set_major_locator(locmin)
-  axs.xaxis.set_minor_formatter(NullFormatter())
+  if scale == 'inner':
+    utau  = d['utau'][0,idx]
+    lstar = d['lstar'][0,idx]
+    axs.plot(d['yn'][idx,:]/lstar,d[var][idx,:]/utau**2,
+             **style,
+            markevery = interval,
+            )
+  
+  elif scale == 'outer':
+    Ue  = d['Ue'][0,idx]
+    lstar = d['lstar'][0,idx]
+    axs.plot(d['yn'][idx,:]/lstar,d[var][idx,:]/Ue**2,
+             **style,
+            markevery = interval,
+            )
   axs.grid(**grid_setup)
   return fig,axs
 
-def plot_integral_quantities(d,fig,axs,x_start,x_end,var,var_Name,style,with_set=True):
+def plot_integral_quantities(d,fig,axs,
+                            x_start,x_end,var,var_Name,
+                            style,with_set=True,interval=5):
   indx = np.where((d['xc'][0,:]>x_start) & (d['xc'][0,:] < x_end))[0]
-  axs.plot(d['xc'][0,indx],d[var][0,indx],**style)
+  axs.plot(d['xc'][0,indx],d[var][0,indx],**style,
+          markevery = interval
+          )
   if with_set:
     axs.set(**{'xlabel':'x/c','ylabel':var_Name})
   return fig,axs
