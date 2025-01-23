@@ -46,6 +46,7 @@ figkw  ={
         }
 
 ## Ticks formats
+
 formatter2 = ticker.ScalarFormatter(useMathText=True)
 formatter2.set_powerlimits([-2,5])
 
@@ -60,6 +61,12 @@ title_setup ={
                 'loc':'left',
                 'pad':22,
                 } 
+
+single_fig_smaller = {
+                'ncols':1,
+                'nrows':1,
+                'figsize':(6,4)
+                  }
 
 single_fig_cfg = {
                 'ncols':1,

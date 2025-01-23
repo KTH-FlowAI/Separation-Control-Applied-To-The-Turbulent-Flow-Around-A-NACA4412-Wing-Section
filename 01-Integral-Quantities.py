@@ -240,38 +240,3 @@ for jl, side in enumerate(sides):
   fig.savefig(f'Figs/02-BL-DEVELP/{side}_{il+1}VARS.pdf',
                 **figkw
                 )
-
-
-
-
-quit()
-#######################################
-# Inspect the Separation points 
-########################################
-
-side = 'SS'
-# We only Care about the suction side 
-VarList =['cf',]
-for var in VarList:
-  fig,axs = plt.subplots(**single_fig_cfg)
-  # axins = zoomed_inset_axes(axs,zoom=3,loc='lower center')
-  
-  x_c = 0.1
-  var_Name = var_name_dict[var]
-  legend_list=[]
-  for il, case_name in enumerate(data.keys()):
-    cf = data[case_name][f'data_{side}'][var].squeeze()
-    xx = data[case_name][f'data_{side}']['xc'].squeeze()
-    ind = np.where((cf>=0))[0][-1]-2
-    x_loc_sep =xx[ind]
-    print(x_loc_sep)
-    axs.plot(il+1,x_loc_sep,"o",c=data[case_name]['style']['c'],markersize=20)
-    legend_list.append(data[case_name]['label'])
-axs.grid(**grid_setup)
-axs.set(**{'xlabel':"CASE","ylabel":"Separation Point (x/c)",
-          "title":"Separation Assessment " + f"($C_f < 0$)"})
-axs.legend(legend_list,loc='lower right')
-fig.savefig(f'Figs/01-CTRL-EFFECT/{side}_Separation_Points.jpg',
-              **figkw
-              )
-

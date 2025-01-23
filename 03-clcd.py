@@ -17,14 +17,59 @@ AOA = 11
 Rec = 200
 fldr='../../database/stsdata/' 
 sides = ['SS',"PS"]
+plt_setUp()
 
+data = data_clcd
 
 def rel_modif(g,p,positive=True):
-
+  """
+  Calculate the relative change of Cl,Cd
+  g : reference value 
+  p : controlled value
+  """
   if positive:
     return (100*(p-g)/g) 
   else:
     return (100*(g-p)/g)
+
+
+def cal_Cmu(ctrl_config):
+  """
+  Calculate the momentum coefficient 
+
+  ctrl_config: [DICT] See the configurations 
+  """
+  # Constant 
+  rho = 1.0
+  lz = 0.6 
+  U0 = 1.0
+  S_wing = lz * 1.0
+  M = 0.5 * rho * U0**2 * S_wing
+
+  # Suction side
+  if ctrl_config['side'][0]:
+    lx = ctrl_config['region'][0][0] - ctrl_config['region'][0][1]
+    v_c = ctrl_config['intensity'][0]
+    S = lz * lx 
+    m_ss  = rho *  v_c * S
+  else: 
+    m_ss = 0
+
+  # Pressure side
+  if ctrl_config['side'][1]:
+    lx = ctrl_config['region'][1][0] - ctrl_config['region'][1][1]
+    v_c = ctrl_config['intensity'][1]
+    S = lz * lx 
+    m_ps  = rho *  v_c * S
+  else: 
+    m_ps = 0
+
+  ms = np.abs(m_ss) + np.abs(m_ps)
+  
+  C_mu = ms * U0 / M 
+
+  return  C_mu
+
 
 # # #######################################
 # # # # OVER SUCTION SIDE 
@@ -96,21 +141,20 @@ df  =pd.read_csv('CLCD.csv')
 ######################
 # Fig 1 Bar for Cd
 ########################
-fig, axs = plt.subplots(1,1,figsize = (10,6))
+fig, axs = plt.subplots(1,1,figsize = (7,6))
 caselist = [c for c in df['Name']]
 caselist = [c for c in df['Name']]
 print(caselist)
-
-
 bottom = np.zeros(shape=(len(caselist)))
-b1 = axs.bar(caselist,df['cd_tauw'],bottom=bottom,color = cc.grays,label='Cf')
+b1 = axs.bar(caselist,df['cd_tauw'],bottom=bottom,color = cc.grays,label=r'$C_{d,f}$')
 bottom += df['cd_tauw']
-b2 = axs.bar(caselist,df['cd_p'],bottom=bottom,color = cc.gray,label='Cp')
-axs.axhline(df["cd_tauw"][0],color = cc.red)
-axs.axhline(df["cd"][0],color = cc.red)
-axs.set_ylabel(r'$C_d = C_f + C_p$',fontsize = 20)
+b2 = axs.bar(caselist,df['cd_p'],bottom=bottom,color = cc.gray,label=r'$C_{d,p}$')
+axs.axhline(df["cd_tauw"][0],linestyle='-.',color = cc.red)
+axs.axhline(df["cd"][0]     ,linestyle='-.',color = cc.red)
+axs.set_ylabel(r'$C_d = C_{d,f} + C_{d,p}$',fontsize = 20)
 axs.set_xlabel(r'CASE',fontsize = 20)
-axs.legend(bbox_to_anchor=(1.0,0.5,0.0,0.5))
+# axs.legend(bbox_to_anchor=(1.0,0.5,0.0,0.5))
+axs.legend(loc='upper left',ncol=2)
 fig.tight_layout()
 fig.savefig('Figs/01-CTRL-EFFECT/cl_cd_bar.jpg',**figkw)
 
@@ -119,25 +163,110 @@ fig.savefig('Figs/01-CTRL-EFFECT/cl_cd_bar.jpg',**figkw)
 # Fig2 Scatter for Cl/Cd
 ################
 
+legend_list = []
+fig, axs = plt.subplots(1,1,figsize=(6,6))
+for il, case in enumerate(data.keys()):
+    
+    style_dict = data[case]['style']
+    labelName  = data[case]['label']
+    
+    # if 'Case C' not in labelName:
+    axs.plot(df['cd'][il],df['cl'][il],
+            linestyle='none',
+            marker=style_dict['marker'],
+            c=style_dict['c'],
+            markersize=25)
+    legend_list.append(Line2D([0],[0],
+                          linestyle='none',
+                          marker=style_dict['marker'],
+                          c=style_dict['c'],
+                          markersize=10,
+                          label=labelName
+                                ))
+# axs.xaxis.set_major_formatter(formatter2)
+axs.grid(**grid_setup)
+axs.set(**{
+          'xlabel':r"$C_d$",
+          'xlim':[0.051,0.056],
+          "ylabel":r"$C_l$",
+          'ylim':[1.310,1.345],
+          })
+axs.axhline(df["cl"][0]     ,linestyle='-.',color = cc.grays)
+axs.axvline(df["cd"][0]     ,linestyle='-.',color = cc.grays)
 
-colorList = [cc.grays, cc.green, cc.deepgreen, cc.lightblue,
-            cc.deepblue, cc.pink, cc.yellow, cc.darkred, cc.red]
-colorList = [cc.black,cc.red,cc.blue,cc.yellow,cc.deepgreen,cc.lightblue]
-fig, axs = plt.subplots(1,1,figsize=(8,4))
-for il, case in enumerate(caselist):
-    if il!=0:
-        axs.plot(df['cd'][il],df['cl'][il],'o',markersize = 11.5,c=colorList[il],label=f"CASE {il}")
-    else:
-      axs.plot(df['cd'][il],df['cl'][il],'*',markersize = 12.5,c=colorList[il],label="Ref")
-
-    # axs.text(df['cd'][il]-(1e-4),df['cl'][il]-2e-3,case,fontsize = 12, 
-              # ha='right',va='bottom',color=colorList[il])
-axs.set_ylabel(r"$C_l$",fontsize = 20)
-axs.set_xlabel(r"$C_d$",fontsize = 20)
-axs.legend(bbox_to_anchor=(1.,0.5,0.0,0.5))
+axs.legend(
+  handles = legend_list,
+  bbox_to_anchor=(1.,0.5,0.0,0.5),
+  prop={'size':15}
+  )
 # axs.set_yticks(np.linspace(0.75,0.95,7))
 # axs.set_xticks(np.linspace(0.02,0.0235,3))
 axs.grid(which='major')
 fig.tight_layout()
 fig.savefig('Figs/01-CTRL-EFFECT/cl_VS_cd.jpg',**figkw)
+
+
+#######################################
+# Inspect the Separation points 
+########################################
+
+side = 'SS'
+for caseName in data.keys():
+  name = data[caseName]['fileName']
+  label = data[caseName]['label']
+  fname= name_file(fldr,name,AOA,Rec,side)+'.mat'
+  data[caseName][f'data_{side}'] = sio.loadmat(fname)
+  data[caseName][f'Cmu'] = cal_Cmu(data[caseName]['config'])
+  print(f"[IO] DATA: {fname}")
+  # print(data[caseName]['data'].keys())
+  
+# We only Care about the suction side 
+VarList =['cf',]
+for var in VarList:
+  fig,axs = plt.subplots(**single_fig_smaller)
+  # axins = zoomed_inset_axes(axs,zoom=3,loc='lower center')
+  
+  x_c = 0.1
+  var_Name = var_name_dict[var]
+  legend_list=[]
+  for il, case_name in enumerate(data.keys()):
+    cf = data[case_name][f'data_{side}'][var].squeeze()
+    xx = data[case_name][f'data_{side}']['xc'].squeeze()
+    Cmu = data[case_name]["Cmu"]
+    ind = np.where((cf>=0))[0][-1]-2
+    x_loc_sep =xx[ind]
+    style_dict = data[case_name]['style']
+    labelName = data[case_name]['label']
+    print(f"{labelName}:\nMomentum Coeff: {Cmu} \t Sep Loc: {x_loc_sep}")
+    axs.plot(Cmu,x_loc_sep,
+            linestyle='none',
+            marker=style_dict['marker'],
+            c=style_dict['c'],
+            markersize=25)
+    
+    legend_list.append(Line2D([0],[0],
+                        linestyle='none',
+                        marker=style_dict['marker'],
+                        c=style_dict['c'],
+                        markersize=10,
+                        label=labelName
+                              ))
+axs.xaxis.set_major_formatter(formatter2)
+axs.grid(**grid_setup)
+axs.set(**{
+          'xlabel':r"$C_{\mu}$",
+          "ylabel":r"$X_{\rm sep}$",
+          'ylim':[0.85,1.0],
+          'xlim':[-1e-3,1.35e-2],
+          # "title":"Separation Assessment " + f"($C_f < 0$)",
+          })
+axs.legend(
+        handles=legend_list,
+        loc='lower right',
+        # ncol=len(legend_list)//2,
+        prop={'size':15}
+          )
+fig.savefig(f'Figs/01-CTRL-EFFECT/{side}_Separation_Points.jpg',
+              **figkw
+              )
 
