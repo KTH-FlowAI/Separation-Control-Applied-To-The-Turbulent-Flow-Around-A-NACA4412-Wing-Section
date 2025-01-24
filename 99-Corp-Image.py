@@ -30,7 +30,9 @@ Image_List = [
               # '2D-NOCTRL.png',
               # 'MESH.png',
               # 'MESH-CLOSE.png',
-              'MESH-CLOSER-2.png',
+              # 'MESH-CLOSER-2.png',
+              '2D-CTRL-2.png', 
+              '2D-NOCTRL-2.png',
               ]
 
 org_path ='Figs/99-SNAPSHOTS/'
