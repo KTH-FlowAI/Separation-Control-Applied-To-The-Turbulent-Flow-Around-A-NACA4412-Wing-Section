@@ -15,7 +15,7 @@ from  lib.configs import *
 import argparse
 AOA = 11 
 Rec = 200
-fldr='../../database/stsdata/' 
+fldr='../database/stsdata/' 
 sides = ['SS',"PS"]
 plt_setUp()
 
@@ -141,20 +141,19 @@ df  =pd.read_csv('CLCD.csv')
 ######################
 # Fig 1 Bar for Cd
 ########################
-fig, axs = plt.subplots(1,1,figsize = (7,6))
-caselist = [c for c in df['Name']]
-caselist = [c for c in df['Name']]
+fig, axs = plt.subplots(1,1,figsize = (6,6))
+caselist = [c[4:] if "Case" in c else c for c in df['Name']  ]
 print(caselist)
 bottom = np.zeros(shape=(len(caselist)))
-b1 = axs.bar(caselist,df['cd_tauw'],bottom=bottom,color = cc.grays,label=r'$C_{d,f}$')
+b1 = axs.bar(caselist,df['cd_tauw'],bottom=bottom,color = cc.gray,label=r'$C_{d,f}$')
 bottom += df['cd_tauw']
-b2 = axs.bar(caselist,df['cd_p'],bottom=bottom,color = cc.gray,label=r'$C_{d,p}$')
+b2 = axs.bar(caselist,df['cd_p'],bottom=bottom,color = cc.grays,label=r'$C_{d,p}$')
 axs.axhline(df["cd_tauw"][0],linestyle='-.',color = cc.red)
 axs.axhline(df["cd"][0]     ,linestyle='-.',color = cc.red)
 axs.set_ylabel(r'$C_d = C_{d,f} + C_{d,p}$',fontsize = 20)
 axs.set_xlabel(r'CASE',fontsize = 20)
 # axs.legend(bbox_to_anchor=(1.0,0.5,0.0,0.5))
-axs.legend(loc='upper left',ncol=2)
+axs.legend(loc='upper left',ncol=1)
 fig.tight_layout()
 fig.savefig('Figs/01-CTRL-EFFECT/cl_cd_bar.jpg',**figkw)
 fig.savefig('Figs/01-CTRL-EFFECT/cl_cd_bar.pdf',**figkw)

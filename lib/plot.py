@@ -282,6 +282,16 @@ var_name_dict={
                           }
                           },
               
+              "psd":{'name': "Time-PSD",
+                    
+                    'axs':{
+                      "xlabel":r"$fc/U_{\infty}$",
+                      "xscale":'log',
+                      "xlim":[5e-1,2e1],
+                      "ylabel":'PSD'
+                    }
+                    },
+
               }
 
 
@@ -363,4 +373,37 @@ def plot_integral_quantities(d,fig,axs,
   if with_set:
     axs.set(**{'xlabel':'x/c','ylabel':var_Name})
   return fig,axs
+
+
+def plot_FFT(d,fig,axs,
+              style,):
+  
+  freq = np.squeeze(d['freq'])
+  psd  = np.squeeze(d['psd'])
+  
+  axs.plot(freq,psd,
+          linestyle=style['linestyle'],
+          lw=style['lw'],
+          c=style['c'],
+          )
+  
+  axs.plot(freq[np.argmax(psd)],psd.max(),"*",
+          markersize=25,
+          c=style['c'])
+  
+  return fig,axs
+
+
+def annot_max(x,y, ax=None):
+    xmax = x[np.argmax(y)]
+    ymax = y.max()
+    text = r"$f/{f_s}$ = "+"{:5f}".format(xmax)
+    if not ax:
+        ax=plt.gca()
+    bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
+    arrowprops=dict(arrowstyle="->",connectionstyle="angle,angleA=0,angleB=60")
+    kw = dict(xycoords='data',textcoords="axes fraction",
+              arrowprops=arrowprops,
+              bbox=bbox_props, ha="right", va="top")
+    ax.annotate(text, xy=(xmax, ymax), xytext=(0.94,0.96), **kw)
 

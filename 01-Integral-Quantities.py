@@ -23,7 +23,7 @@ plt_setUp()
 
 AOA = 11 
 Rec = 200
-fldr='../../database/stsdata/' 
+fldr='../database/stsdata/' 
 sides = ['SS',"PS"]
 
 #######################################
