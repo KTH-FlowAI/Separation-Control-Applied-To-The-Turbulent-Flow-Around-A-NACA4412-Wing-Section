@@ -44,11 +44,11 @@ data=     {
                             'c':cc.black,
                             'linestyle':"-",
                         #     'marker':mktype1,
-                        #     'markersize':6.0,
+                        #     'markersize':mksize1,
                         #     'fillstyle':'none',
-                            },
-                    'label':'Ref',
-                    },
+                        },
+                        'label':'Ref',
+                        },
         
         'control':{
                     'fileName':'CTRL_025-086XC_0.25%Uinf_SS-SUCTION_PS-BLOWING/',

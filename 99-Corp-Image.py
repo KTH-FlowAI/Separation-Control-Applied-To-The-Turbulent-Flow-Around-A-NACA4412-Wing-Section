@@ -25,10 +25,12 @@ def CorpImage(image_name,org_path,save_path):
 
 
 
-Image_List = ['2D-CTRL.png', 
-              '2D-NOCTRL.png',
-              'MESH.png',
-              'MESH-CLOSE.png',
+Image_List = [
+              # '2D-CTRL.png', 
+              # '2D-NOCTRL.png',
+              # 'MESH.png',
+              # 'MESH-CLOSE.png',
+              'MESH-CLOSER-2.png',
               ]
 
 org_path ='Figs/99-SNAPSHOTS/'

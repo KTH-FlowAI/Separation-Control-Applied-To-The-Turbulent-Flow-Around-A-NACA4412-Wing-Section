@@ -37,6 +37,17 @@ def plt_setUp():
     plt.rc("ytick",labelsize = 22)
     return 
 
+def plt_setUp_Smaller():
+    import matplotlib.pyplot as plt
+    plt.rc("font",family = "serif")
+    plt.rc("text",usetex = "true")
+    plt.rc("font",size = 20)
+    plt.rc("axes",labelsize = 25, linewidth = 2)
+    plt.rc("legend",fontsize= 20, handletextpad = 0.1)
+    plt.rc("xtick",labelsize = 18)
+    plt.rc("ytick",labelsize = 18)
+    return 
+
 
 
 # Setup for output 
@@ -44,11 +55,15 @@ figkw  ={
         'bbox_inches':'tight',
         "dpi":300
         }
+figkw2  ={
+        'transparent':True,
+        "dpi":300
+        }
 
 ## Ticks formats
 
 formatter2 = ticker.ScalarFormatter(useMathText=True)
-formatter2.set_powerlimits([-2,5])
+formatter2.set_powerlimits([-1,5])
 
 formatter3 = ticker.ScalarFormatter(useMathText=True,
                                     useLocale=True)
@@ -75,7 +90,7 @@ single_fig_smaller = {
 single_fig_cfg = {
                 'ncols':1,
                 'nrows':1,
-                'figsize':(8,8)
+                'figsize':(7,7)
                   }
 
 single_fig_larger = {
@@ -278,6 +293,11 @@ def name_file(fldr,usrname,aoa,rec,side):
     return fldr + usrname + name + "_" + side
   else:
     return fldr + usrname + name  
+
+
+################################################
+# Functions for Visualizaing Single Pannel 
+###############################################
 
 def plot_Vel(d,fig,axs,x_c,var,
               var_Name,

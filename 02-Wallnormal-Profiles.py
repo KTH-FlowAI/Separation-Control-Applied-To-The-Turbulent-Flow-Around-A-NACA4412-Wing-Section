@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--x',default=0.75,type=float)
 parser.add_argument('--s',default="SS",type=str)
 args = parser.parse_args()
-plt_setUp()
+plt_setUp_Smaller()
 
 
 # data = data_clcd
@@ -73,19 +73,46 @@ def Visual_Mean_Vel():
                 axs.xaxis.set_major_locator(locmin)
                 axs.xaxis.set_minor_formatter(NullFormatter())
                 axs.yaxis.set_major_formatter(formatter2)
-                
-                # if side == 'SS' :
-                #     axs.legend(legend_list,loc='upper left')
-                # elif side == 'PS' and "U" in var:
-                #     axs.legend(legend_list,loc='upper left')
-                # else:
-                #     axs.legend(legend_list,loc='upper right')
-
                 fig.savefig(f'Figs/03-STATS/{side}_{var}_{int(x_c*100)}_{scale}.pdf',
-                        **{'dpi':300}
+                        **figkw2
                         )
                 plt.clf()
                 plt.close(fig)
+
+def Visual_Mean_U_Vel():
+    VarList =['U','V']
+    scales=['inner','outer']
+    for scale in scales:
+        for side in sides: 
+            for var in VarList:
+                fig,axs = plt.subplots(**single_fig_cfg)
+                x_c = args.x
+                var_Name = var_name_dict[var+scale]
+                legend_list=[]
+                
+                for case_name in data.keys():
+
+                    fig,axs = plot_Vel(data[case_name][f'data_{side}'],
+                                    fig,axs,x_c,var,var_Name,
+                                    data[case_name]['style'],
+                                    grid_setup,
+                                    scale=scale)
+                    legend_list.append(data[case_name]['label'])
+                
+                axs.set(**var_name_dict[var+scale]['axs'])
+                axs.set_title(rf"$x/c={x_c}$"+", "+f"{side_text[side]}")
+                axs.xaxis.set_minor_locator(locmin)
+                axs.xaxis.set_major_locator(locmin)
+                axs.xaxis.set_minor_formatter(NullFormatter())
+                axs.yaxis.set_major_formatter(formatter2)
+                fig.savefig(f'Figs/03-STATS/{side}_{var}_{int(x_c*100)}_{scale}.pdf',
+                        **figkw2
+                        )
+                plt.clf()
+                plt.close(fig)
+
+
+
 
 """
 Reynolds Stresses profiles 
@@ -123,7 +150,7 @@ def Visual_Reynolds_Stress():
                 # else:
                 #     axs.legend(legend_list,loc='upper right')
                 fig.savefig(f'Figs/03-STATS/{side}_{var}_{int(x_c*100)}_{scale}.pdf',
-                        **{'dpi':300}
+                        **figkw2
                         )
                 plt.clf()
                 plt.close(fig)

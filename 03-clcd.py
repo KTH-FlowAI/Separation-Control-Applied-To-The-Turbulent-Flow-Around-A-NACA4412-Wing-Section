@@ -236,7 +236,8 @@ for var in VarList:
     xx = data[case_name][f'data_{side}']['xc'].squeeze()
     Cmu = data[case_name]["Cmu"]
     ind = np.where((cf>=0))[0][-1]-2
-    x_loc_sep =xx[ind]
+    x_loc_sep = 1 - xx[ind]
+
     style_dict = data[case_name]['style']
     labelName = data[case_name]['label']
     print(f"{labelName}:\nMomentum Coeff: {Cmu} \t Sep Loc: {x_loc_sep}")
@@ -250,21 +251,21 @@ for var in VarList:
                         linestyle='none',
                         marker=style_dict['marker'],
                         c=style_dict['c'],
-                        markersize=10,
+                        markersize=8,
                         label=labelName
                               ))
 axs.xaxis.set_major_formatter(formatter2)
 axs.grid(**grid_setup)
 axs.set(**{
           'xlabel':r"$C_{\mu}$",
-          "ylabel":r"$X_{\rm sep}$",
-          'ylim':[0.85,1.0],
-          'xlim':[-1e-3,1.35e-2],
+          "ylabel":r"$l_{\rm sep}$",
+          'ylim':[0.0,0.15],
+          'xlim':[-1e-3,1.4e-2],
           # "title":"Separation Assessment " + f"($C_f < 0$)",
           })
 axs.legend(
         handles=legend_list,
-        loc='lower right',
+        loc='upper right',
         # ncol=len(legend_list)//2,
         prop={'size':15}
           )
