@@ -218,9 +218,12 @@ VarList =[
           "Retau",
           "H12",
           ]
+
+fig, axss = plt.subplots(**quadra_fig_22)
+axss = axss.flatten()
 AlphaList = [['(a)',"(b)","(c)","(d)"],["(e)","(f)","(g)","(h)"]]
 for jl, side in enumerate(sides): 
-  fig,axss = plt.subplots(**quadra_fig_larger)
+  # fig,axss = plt.subplots(**quadra_fig_larger)
   for il, var in enumerate(VarList):
     axs=axss[il]
     # fig,axs = plt.subplots(**single_fig_cfg)
@@ -234,7 +237,12 @@ for jl, side in enumerate(sides):
         x_end = 0.95
       style_dict = data[case_name]['style']
       style_dict['lw']  = 3.5
-      style_dict['markersize']  = 9.0
+      style_dict['marker']  = None
+      if side == 'SS':
+        style_dict['linestyle']='-'
+      elif side == 'PS':
+        style_dict['linestyle']='--'
+      
       fig,axs = plot_integral_quantities(data[case_name][f'data_{side}'],
                                         fig,axs,x_c,x_end,
                                         var,var_Name,style_dict,
@@ -245,16 +253,22 @@ for jl, side in enumerate(sides):
     axs.set(**var_name_dict[var]['axs'])
     axs.grid(**grid_setup)
     axs.axvspan(**control_region_cfg)
-    axs.set_title(AlphaList[jl][il] + f" {side_text[side]}",**title_setup)
-  fig.subplots_adjust(**{"hspace":0.4,"wspace":0.2})
-  fig.savefig(f'Figs/02-BL-DEVELP/{side}_{il+1}VARS.jpg',
+    axs.set_title(AlphaList[0][il],**title_setup)
+    # axs.yaxis.set_major_formatter(formatter3)
+fig.subplots_adjust(**{"hspace":0.4,"wspace":0.3})
+fig.savefig(f'Figs/02-BL-DEVELP/BL_{il+1}VARS.jpg',
                 **figkw
                 )
-  fig.savefig(f'Figs/02-BL-DEVELP/{side}_{il+1}VARS.pdf',
+fig.savefig(f'Figs/02-BL-DEVELP/BL_{il+1}VARS.pdf',
                 **figkw
                 )
 
 
+
+
+"""
+Obtain the integral quantities at x/c = 0.75 
+"""
 VarList = [
           "cf",
           "cp",

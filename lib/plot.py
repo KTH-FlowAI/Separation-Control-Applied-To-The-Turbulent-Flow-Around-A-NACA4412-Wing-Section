@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt 
 from matplotlib.ticker import LogLocator, NullFormatter
 from    matplotlib.lines import Line2D
+from matplotlib.patches import Rectangle
 import  matplotlib.ticker as ticker
 from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes, mark_inset,inset_axes
 
@@ -53,7 +54,8 @@ def plt_setUp_Smaller():
 # Setup for output 
 figkw  ={
         'bbox_inches':'tight',
-        "dpi":300
+        "dpi":300,
+        'transparent':True,
         }
 figkw2  ={
         'transparent':True,
@@ -122,6 +124,29 @@ quadra_fig_larger = {
                 # 'sharex':True
                   }
 
+quadra_fig_22 = {
+                'ncols':2,
+                'nrows':2,
+                # 'figsize':(24,6),
+                'figsize':(20,15),
+                # 'sharex':True
+                  }
+quadra_fig_22_large = {
+                'ncols':2,
+                'nrows':2,
+                # 'figsize':(24,6),
+                'figsize':(12,14),
+                # 'sharex':True
+                  }
+
+quadra_fig_22_large2 = {
+                'ncols':2,
+                'nrows':2,
+                # 'figsize':(24,6),
+                'figsize':(16,12),
+                # 'sharex':True
+                  }
+
 ## Support lines 
 
 support_line1 = {'color':cc.grays,
@@ -186,6 +211,7 @@ var_name_dict={
                           "axs":{
                             'xlabel':r'$y^+_n$',
                             'xscale':"log",
+                            'xlim':[0.5,800],
                             'ylabel':r"$\overline{u^2_t}^+$",
                           },
                           },
@@ -193,6 +219,7 @@ var_name_dict={
                           "axs":{
                             'xlabel':r'$y^+_n$',
                             'xscale':"log",
+                            'xlim':[0.5,800],
                             'ylabel':r"$\overline{u^2_t}/U^2_e$",
                           },
                           },
@@ -241,6 +268,29 @@ var_name_dict={
                           }
                           },
 
+              'uiujinner'     :{"name":   r"$\overline{u_iu_j}^+$",
+                          "axs":{
+                            'xlabel':r'$y^+_n$',
+                            'xscale':"log",
+                            'xlim':[0.5,500],
+                            'ylabel':r"$\overline{v_n^2}^+$" + ", " + \
+                                    r"$\overline{w^2}^+$" + ", " +\
+                                    r"$\overline{u_tv_n}^+$",
+                          }
+                          },
+              
+              'uiujouter'     :{"name":   r"$\overline{u_iu_j}/U^2_e$",
+                          "axs":{
+                            'xlabel':r'$y^+_n$',
+                            'xscale':"log",
+                            'xlim':[0.5,800],
+                            'ylabel':r"$\overline{v_n^2}/U^2_e$" + ", " + \
+                                    r"$\overline{w^2}/U^2_e$" + ", " +\
+                                    r"$\overline{u_tv_n}/U^2_e$",
+                          }
+                          },
+              
+              
               'cf'     :{"name":r"$c_f$",
                           "axs":{
                             'xlabel':r'$x/c$',
@@ -287,7 +337,8 @@ var_name_dict={
                     'axs':{
                       "xlabel":r"$fc/U_{\infty}$",
                       "xscale":'log',
-                      "xlim":[5e-1,2e1],
+                      # "xlim":[5e-1,2e1],
+                      "xlim":[5e-1,1e1],
                       "ylabel":'PSD'
                     }
                     },

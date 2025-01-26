@@ -36,6 +36,8 @@ def name_file(fldr,name,nprof,var):
 NPROF = args.prof 
 VAR   = args.var
 
+Nprofs = [7,9]
+Vars = ['U','P']
 #######################################
 # OVER SUCTION/PRESSURE SIDE 
 #######################################
@@ -45,22 +47,36 @@ for caseName in data.keys():
     if 'Case' in name:
       loc = name.find('e')
       name = name[:loc+1]+name[-1]
-    fname= name_file(fldr,name,NPROF,VAR)
-    print(fname)
-    try: 
-      data[caseName]['data'] = sio.loadmat(fname)
-      print(f"[IO] DATA: {fname}")
-    except:
-      data[caseName]['data'] = {}
+    for nprof in Nprofs:
+      for var in Vars:
+        fname= name_file(fldr,name,nprof,var)
+        print(fname)
+        data[caseName][f'data_{nprof}_{var}'] = sio.loadmat(fname)
+        print(f"[IO] DATA: {fname}")
 
 
-fig, axs = plt.subplots(1,1,figsize=(7,7))
+var_name = {
+              'U':r'$u_t$',
+              'P':r"$p'$",
+            }
+
+fig, axss = plt.subplots(2,2,figsize=(16,10))
+AlphaList = [["(a)","(c)"],["(b)","(d)"],]
 for caseName in data.keys():
-  d = data[caseName]['data']
-  style=data[caseName]['style']
-  try:
-    fig,axs=plot_FFT(d,fig,axs,style)
-  except:
-    continue
-axs.set(**var_name_dict['psd']['axs'])
-fig.savefig(save_dir+f'FFT_{NPROF}_{VAR}.jpg',**{"dpi":300})
+  for il, nprof in enumerate(Nprofs):
+    for jl, var in enumerate(Vars):
+      axs = axss[jl,il]
+      d = data[caseName][f'data_{nprof}_{var}']
+      style=data[caseName]['style']
+      fig,axs=plot_FFT(d,fig,axs,style)
+      xc = d['xloc'][0][0]
+      
+      axs.grid(**grid_setup)
+      axs.set(**var_name_dict['psd']['axs'])
+      axs.set_title( AlphaList[il][jl]  +\
+                    " " + f"{var_name[var]}" + ",  " + \
+                    rf'$x/c = {xc} $',**title_setup)
+fig.subplots_adjust(**{"wspace":0.2,'hspace':0.5})
+
+fig.savefig(save_dir+f'FFT_4.jpg',**{"dpi":300,'transparent':True,'bbox_inches':'tight'})
+fig.savefig(save_dir+f'FFT_4.pdf',**{"dpi":300,'transparent':True,'bbox_inches':'tight'})
