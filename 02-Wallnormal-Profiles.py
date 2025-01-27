@@ -72,10 +72,10 @@ def Visual_Mean_Vel():
                 
                 axs.set(**var_name_dict[var+scale]['axs'])
                 axs.set_title(AlphaList[(jl-1)*2+il] + " " + rf"$x/c={x_c}$"+", "+f"{side_text[side]}",**title_setup)
-            axs.xaxis.set_minor_locator(locmin)
-            axs.xaxis.set_major_locator(locmin)
-            axs.xaxis.set_minor_formatter(NullFormatter())
-            axs.yaxis.set_major_formatter(formatter2)
+                axs.xaxis.set_minor_locator(locmin)
+                axs.xaxis.set_major_locator(locmin)
+                axs.xaxis.set_minor_formatter(NullFormatter())
+                axs.yaxis.set_major_formatter(formatter2)
         fig.subplots_adjust(**{"hspace":0.3,"wspace":0.3})
         fig.savefig(f'Figs/03-STATS/{var}_{int(x_c*100)}.pdf',
                         **figkw
@@ -136,7 +136,7 @@ def Visual_Reynolds_Stress_All():
             ]
     # VarList =["vv",'ww','uv']
     scales=['inner','outer']
-    AlphaList = ["(a)","(b)","(c)","(d)",]
+    AlphaList = [["(a)","(c)"],["(b)","(d)"],]
     colors = plt.get_cmap('plasma')
     colors = colors(np.linspace(0,1,1+len(VarList)))[:-1]
     
@@ -160,7 +160,7 @@ def Visual_Reynolds_Stress_All():
                                     interval=100,)
                     
             axs.set(**var_name_dict['uiuj'+scale]['axs'])
-            axs.set_title(AlphaList[(jl-1)*2+il] + " " + rf"$x/c={x_c}$"+", "+f"{side_text[side]}",**title_setup)
+            axs.set_title(AlphaList[jl][il] + " " + rf"$x/c={x_c}$"+", "+f"{side_text[side]}",**title_setup)
             axs.xaxis.set_minor_locator(locmin)
             axs.xaxis.set_major_locator(locmin)
             axs.xaxis.set_minor_formatter(NullFormatter())

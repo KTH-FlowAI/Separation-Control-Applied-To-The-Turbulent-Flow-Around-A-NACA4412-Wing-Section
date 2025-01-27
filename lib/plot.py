@@ -77,6 +77,7 @@ formatter3.set_powerlimits([-2,4])
 
 ## Syntax for set log grid 
 locmin = LogLocator(base=10,subs=np.arange(0,10), numticks=10)
+locmin2 = LogLocator(base=10,subs=np.arange(0,10), numticks=10)
 
 title_setup ={  
                 'loc':'left',
@@ -427,7 +428,9 @@ def plot_integral_quantities(d,fig,axs,
 
 
 def plot_FFT(d,fig,axs,
-              style,):
+              style,
+              text_loc=(0.9,0.96)
+              ):
   
   freq = np.squeeze(d['freq'])
   psd  = np.squeeze(d['psd'])
@@ -439,22 +442,69 @@ def plot_FFT(d,fig,axs,
           )
   
   axs.plot(freq[np.argmax(psd)],psd.max(),"*",
-          markersize=25,
+          markersize=20,
           c=style['c'])
   
+  xmax = freq[np.argmax(psd)]
+  ymax = psd.max()
+  text = r"$fc/U_{\infty}$ = "+"{:.1e}".format(xmax)
+  axs = annot_max(xmax,ymax,text,
+                  text_loc=text_loc,
+                  c=style['c'],ax=axs)
+
   return fig,axs
 
 
-def annot_max(x,y, ax=None):
-    xmax = x[np.argmax(y)]
-    ymax = y.max()
-    text = r"$f/{f_s}$ = "+"{:5f}".format(xmax)
+def annot_max(xmax,ymax,text,c,text_loc, ax=None,):
     if not ax:
         ax=plt.gca()
-    bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
-    arrowprops=dict(arrowstyle="->",connectionstyle="angle,angleA=0,angleB=60")
+    bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec=c, lw=0.72)
+    arrowprops=dict(arrowstyle="->",connectionstyle="angle,angleA=0,angleB=75",color=c)
     kw = dict(xycoords='data',textcoords="axes fraction",
               arrowprops=arrowprops,
-              bbox=bbox_props, ha="right", va="top")
-    ax.annotate(text, xy=(xmax, ymax), xytext=(0.94,0.96), **kw)
+              bbox=bbox_props, ha="right", va="top",fontsize=15)
+    ax.annotate(text, xy=(xmax, ymax), 
+                xytext=text_loc,
+                color=c, 
+                **kw)
+
+    return ax
+
+
+def plot_1DPSD(d,fig,axs,
+              style,
+              levels,
+              text_loc=(0.9,0.96)
+              ):
+  lmd = d['lmd']
+  yn  = d['yn']
+  puu = d['puu']
+  
+  axs.contour(
+                  lmd,
+                  yn,
+                  puu,
+                  colors=style['c'],
+                  levels=levels*np.max(d['puu'],(0,1))
+              )
+
+  ind_  = np.unravel_index(np.argmax(np.abs(puu)),
+                          shape=puu.shape)
+  xx_max = lmd[ind_[1]]
+  yy_max = yn[ind_[0]]
+  
+  axs.plot(xx_max,yy_max,"*",
+          markersize=20,
+          c=style['c'],
+          zorder=10,
+          )
+  
+  puu_max = np.max(puu)
+  text = "{:.2e}".format(puu_max)
+  axs = annot_max(xx_max,yy_max,
+                  text=text,
+                  text_loc=text_loc,
+                  c=style['c'],ax=axs)
+
+  return fig,axs
 

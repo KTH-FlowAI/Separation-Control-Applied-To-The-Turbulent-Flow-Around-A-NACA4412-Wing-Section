@@ -36,8 +36,10 @@ def name_file(fldr,name,nprof,var):
 NPROF = args.prof 
 VAR   = args.var
 
-Nprofs = [7,9]
-Vars = ['U','P']
+Nprofs = [10,9]
+Vars = ['U',
+        'P']
+
 #######################################
 # OVER SUCTION/PRESSURE SIDE 
 #######################################
@@ -56,26 +58,31 @@ for caseName in data.keys():
 
 
 var_name = {
-              'U':r'$u_t$',
-              'P':r"$p'$",
+              'U':r'${\rm PSD}(u_t)$',
+              'P':r"${\rm PSD}(p')$",
             }
 
 fig, axss = plt.subplots(2,2,figsize=(16,10))
 AlphaList = [["(a)","(c)"],["(b)","(d)"],]
-for caseName in data.keys():
+for kl, caseName in enumerate(reversed(data.keys())):
   for il, nprof in enumerate(Nprofs):
     for jl, var in enumerate(Vars):
       axs = axss[jl,il]
       d = data[caseName][f'data_{nprof}_{var}']
       style=data[caseName]['style']
-      fig,axs=plot_FFT(d,fig,axs,style)
+      fig,axs=plot_FFT(d,fig,axs,style,text_loc=(0.9-kl*0.1,0.9-kl*0.1))
       xc = d['xloc'][0][0]
       
       axs.grid(**grid_setup)
       axs.set(**var_name_dict['psd']['axs'])
+      axs.set_ylabel(var_name[var])
       axs.set_title( AlphaList[il][jl]  +\
-                    " " + f"{var_name[var]}" + ",  " + \
+                    " " + \
                     rf'$x/c = {xc} $',**title_setup)
+      axs.xaxis.set_minor_locator(locmin2)
+      axs.xaxis.set_major_locator(locmin2)        
+      # axs.yaxis.set_minor_locator(locmin)
+      # axs.yaxis.set_major_locator(locmin)
 fig.subplots_adjust(**{"wspace":0.2,'hspace':0.5})
 
 fig.savefig(save_dir+f'FFT_4.jpg',**{"dpi":300,'transparent':True,'bbox_inches':'tight'})

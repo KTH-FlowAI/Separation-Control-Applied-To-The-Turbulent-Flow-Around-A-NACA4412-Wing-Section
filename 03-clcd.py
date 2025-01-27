@@ -17,7 +17,7 @@ AOA = 11
 Rec = 200
 fldr='../database/stsdata/' 
 sides = ['SS',"PS"]
-plt_setUp()
+plt_setUp_Smaller()
 
 data = data_clcd
 
@@ -141,22 +141,21 @@ df  =pd.read_csv('CLCD.csv')
 ######################
 # Fig 1 Bar for Cd
 ########################
-fig, axs = plt.subplots(1,1,figsize = (6,6))
+fig, axss = plt.subplots(1,2,figsize = (14,6))
+axs = axss[0]
 caselist = [c[4:] if "Case" in c else c for c in df['Name']  ]
 print(caselist)
 bottom = np.zeros(shape=(len(caselist)))
-b1 = axs.bar(caselist,df['cd_tauw'],bottom=bottom,color = cc.gray,label=r'$C_{d,f}$')
-bottom += df['cd_tauw']
-b2 = axs.bar(caselist,df['cd_p'],bottom=bottom,color = cc.grays,label=r'$C_{d,p}$')
-axs.axhline(df["cd_tauw"][0],linestyle='-.',color = cc.red)
+b1 = axs.bar(caselist,df['cd_p'],bottom=bottom,color = cc.gray,label=r'$C_{d,p}$')
+bottom += df['cd_p']
+b2 = axs.bar(caselist,df['cd_tauw'],bottom=bottom,color = cc.grays,label=r'$C_{d,f}$')
+axs.axhline(df["cd_p"][0],linestyle='-.',color = cc.red)
 axs.axhline(df["cd"][0]     ,linestyle='-.',color = cc.red)
 axs.set_ylabel(r'$C_d = C_{d,f} + C_{d,p}$',fontsize = 20)
 axs.set_xlabel(r'CASE',fontsize = 20)
 # axs.legend(bbox_to_anchor=(1.0,0.5,0.0,0.5))
-axs.legend(loc='upper left',ncol=1)
-fig.tight_layout()
-fig.savefig('Figs/01-CTRL-EFFECT/cl_cd_bar.jpg',**figkw)
-fig.savefig('Figs/01-CTRL-EFFECT/cl_cd_bar.pdf',**figkw)
+# axs.legend(loc='upper left',ncol=2)
+axs.set_title("(a)",**title_setup)
 
 
 ################
@@ -164,18 +163,19 @@ fig.savefig('Figs/01-CTRL-EFFECT/cl_cd_bar.pdf',**figkw)
 ################
 
 legend_list = []
-fig, axs = plt.subplots(1,1,figsize=(6,6))
+# fig, axs = plt.subplots(1,1,figsize=(6,6))
+axs = axss[1]
 for il, case in enumerate(data.keys()):
     
     style_dict = data[case]['style']
     labelName  = data[case]['label']
     
-    if 'Case C' not in labelName:
+    if 'Case O' not in labelName:
       axs.plot(df['cd'][il],df['cl'][il],
               linestyle='none',
               marker=style_dict['marker'],
               c=style_dict['c'],
-              markersize=25)
+              markersize=15)
       legend_list.append(Line2D([0],[0],
                             linestyle='none',
                             marker=style_dict['marker'],
@@ -187,20 +187,21 @@ for il, case in enumerate(data.keys()):
 axs.grid(**grid_setup)
 axs.set(**{
           'xlabel':r"$C_d$",
-          'xlim':[0.051,0.056],
+          # 'xlim':[0.051,0.056],
           "ylabel":r"$C_l$",
-          'ylim':[1.310,1.345],
+          # 'ylim':[1.310,1.345],
           })
 axs.axhline(df["cl"][0]     ,linestyle='-.',color = cc.grays)
 axs.axvline(df["cd"][0]     ,linestyle='-.',color = cc.grays)
 
 axs.legend(
   handles = legend_list,
-  bbox_to_anchor=(1.,0.5,0.0,0.5),
+  loc ='upper left',
+  ncol = len(legend_list)//2,
+  # bbox_to_anchor=(1.,0.5,0.0,0.5),
   prop={'size':15}
   )
-# axs.set_yticks(np.linspace(0.75,0.95,7))
-# axs.set_xticks(np.linspace(0.02,0.0235,3))
+axs.set_title("(b)",**title_setup)
 axs.grid(which='major')
 fig.tight_layout()
 fig.savefig('Figs/01-CTRL-EFFECT/cl_VS_cd.jpg',**figkw)

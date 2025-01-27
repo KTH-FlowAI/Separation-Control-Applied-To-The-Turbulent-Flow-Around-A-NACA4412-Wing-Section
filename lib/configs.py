@@ -48,6 +48,12 @@ data=     {
                             'fillstyle':'none',
                         },
                         'label':'Ref',
+                        'config':{
+                        'region':[(0.0,0.0),(0,0)],
+                        'intensity':[0.0,0.0],
+                        "freq":[0.0,0.0],
+                        'side':[False,False], # (S.S,P.S), 1==Yes, 0==No
+                },
                         },
         
         'control':{
@@ -61,6 +67,12 @@ data=     {
                             'fillstyle':'none',
                             },
                     'label':'Case A',
+                    'config':{
+                        'region':[(0.25,0.86),(0.25,0.86)],
+                        'intensity':[-0.25/100,0.25/100],  
+                        "freq":[0.0,0.0],
+                        'side':[True,True], # (S.S,P.S), 1==Yes, 0==No
+                              },
                     },
         
         'control1':{
@@ -74,6 +86,12 @@ data=     {
                             'fillstyle':'none',
                             },
                     'label':'Case B',
+                    'config':{
+                        'region':[(0.25,0.86),(0.25,0.86)],
+                        'intensity':[-0.5/100,0.5/100],  
+                        "freq":[0.0,0.0],
+                        'side':[True,True], # (S.S,P.S), 1==Yes, 0==No
+                              },
                     },
 
         'control2':{
@@ -87,6 +105,13 @@ data=     {
                             'fillstyle':'none',
                             },
                     'label':'Case C',
+                    'config':{
+                        'region':[(0.25,0.86),(0.25,0.86)],
+                        'intensity':[-0.5/100,0.5/100],  
+                        "freq":[0.0,0.0],
+                        'side':[True,True], # (S.S,P.S), 1==Yes, 0==No
+                              },
+
                     },
       }
 

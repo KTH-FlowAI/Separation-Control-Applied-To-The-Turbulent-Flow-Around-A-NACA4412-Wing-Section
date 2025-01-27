@@ -13,7 +13,7 @@ from   scipy.integrate import quad
 from  lib.plot import *  
 from  lib.configs import *
 import argparse
-
+import copy
 parser = argparse.ArgumentParser()
 parser.add_argument('--x',default=0.75,type=float)
 parser.add_argument('--s',default="SS",type=str)
@@ -53,10 +53,10 @@ control_region_cfg = {
 ### ZOOM IN THE T.E For CF on S.S
 var = 'cf'
 # fig,axs = plt.subplots(**single_fig_cfg)
-fig,axss = plt.subplots(**double_fig_larger)
+fig,axss = plt.subplots(1,2,figsize=(18,8))
 axs = axss[0]
 axins = inset_axes(axs, 
-                   width="130%", 
+                  width="130%", 
                   height="35%",
                   bbox_to_anchor=(  0.7,  0.55,   0.3,   0.4),
                   bbox_transform=axs.transAxes,
@@ -73,17 +73,22 @@ control_region_cfg2 = {
 var_Name = var_name_dict[var]['name']
 legend_list=[]
 for case_name in data.keys():
+  style_dict = copy.deepcopy(data[case_name]['style'])
+  style_dict['marker'] = None
+  style_dict['linestyle'] = "-"
+  style_dict['lw'] = 3.0
+
   fig,axs = plot_integral_quantities(data[case_name]['data_SS'],fig,axs,
                                     x_start,x_end,
-                                    var,var_Name,data[case_name]['style'],interval=3)
+                                    var,var_Name,style_dict,interval=3)
   axs.set(**var_name_dict[var]['axs'])
   fig,axins = plot_integral_quantities(data[case_name]['data_SS'],fig,axins,
                                       x_c_zoom,0.99,
-                                      var,var_Name,data[case_name]['style'],with_set=False)
+                                      var,var_Name,style_dict,with_set=False)
   legend_list.append(data[case_name]['label'])
 axs.yaxis.set_major_formatter(formatter2)
 axs.grid(**grid_setup)
-axs.set_title('S.S',)
+axs.set_title('(a)',**title_setup)
 axs.axvspan(**control_region_cfg)
 axins.axvspan(**control_region_cfg2)
 axins.set_ylim([-0.001,0.002])
@@ -91,46 +96,29 @@ axins.yaxis.set_major_formatter(formatter2)
 axs.axhline(0,**support_line1)
 axins.axhline(0,**support_line1)
 
-# axs.legend(legend_list,
-#             loc='upper center',
-#             bbox_to_anchor=(0.5,.5,0.0,0.5),
-#             ncol=len([k for k in data.keys()]),)
-
-# fig.savefig(f'Figs/02-BL-DEVELP/SS_{var}_Inspection.jpg',
-#               **figkw
-#               )
 #----------------------
 # Pressure Side 
 #----------------------
 # fig,axs = plt.subplots(**single_fig_cfg)
-axs = axss[1]
+
+axs = axss[0]
 var_Name = var_name_dict[var]['name']
 legend_list=[]
 for case_name in data.keys():
+  style_dict = copy.deepcopy(data[case_name]['style'])
+  style_dict['marker'] = None
+  style_dict['linestyle'] = "--"
+  style_dict['lw'] = 3.0
   fig,axs = plot_integral_quantities(data[case_name]['data_PS'],fig,axs,
                                     x_start,x_end,
-                                    var,var_Name,data[case_name]['style'],
+                                    var,var_Name,style_dict,
                                     interval=3,
                                     )
   axs.set(**var_name_dict[var]['axs'])
   legend_list.append(data[case_name]['label'])
 axs.grid(**grid_setup)
 axs.axvspan(**control_region_cfg)
-axs.set_ylabel(' ')
-axs.set_title('P.S',)
 axs.yaxis.set_major_formatter(formatter2)
-fig.subplots_adjust(wspace=0.1)
-# axs.legend(legend_list,
-#             loc='upper center',
-#             bbox_to_anchor=(0.5,.65,0.0,0.5),
-#             ncol=len([k for k in data.keys()]),)
-fig.savefig(f'Figs/02-BL-DEVELP/{var}_BothSides.jpg',
-              **figkw
-              )
-fig.savefig(f'Figs/02-BL-DEVELP/{var}_BothSides.pdf',
-              **figkw
-              )
-
 
 
 #------------------------------------------
@@ -140,11 +128,12 @@ fig.savefig(f'Figs/02-BL-DEVELP/{var}_BothSides.pdf',
 ### ZOOM IN THE T.E For CF on S.S
 var = 'cp'
 # fig,axs = plt.subplots(**single_fig_larger)
-fig,axs = plt.subplots(**single_fig_cfg)
+# fig,axs = plt.subplots(**single_fig_cfg)
+axs = axss[1]
 axins = inset_axes(axs,
                           width="200%", 
                           height="75%",
-                         bbox_to_anchor=(  0.75,  0.2,   0.3,   0.4),
+                          bbox_to_anchor=(  0.75,  0.2,   0.3,   0.4),
                           bbox_transform=axs.transAxes,
                           )
 x_start = 0.0,
@@ -190,15 +179,12 @@ axs.axvspan(**control_region_cfg)
 axins.axvspan(**control_region_cfg2)
 axs.axhline(0,**support_line1)
 axins.axhline(0,**support_line1)
-
-# axs.legend(handles=legend_list,
-#             loc='upper center',
-#             bbox_to_anchor=(0.5,.65,0.0,0.5),
-#             ncol=len([k for k in data.keys()]),)
-fig.savefig(f'Figs/02-BL-DEVELP/{var}_BothSides.jpg',
+axs.set_title('(b)',**title_setup)
+fig.subplots_adjust(wspace=0.2)
+fig.savefig(f'Figs/02-BL-DEVELP/cf_cp_BothSides.jpg',
               **figkw
               )
-fig.savefig(f'Figs/02-BL-DEVELP/{var}_BothSides.pdf',
+fig.savefig(f'Figs/02-BL-DEVELP/cf_cp_BothSides.pdf',
               **figkw
               )
 
