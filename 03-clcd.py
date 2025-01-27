@@ -269,6 +269,7 @@ axs.legend(
         # ncol=len(legend_list)//2,
         prop={'size':15}
           )
+# axs.set_title("(c)",**title_setup)
 fig.savefig(f'Figs/01-CTRL-EFFECT/{side}_Separation_Points.jpg',
               **figkw
               )
