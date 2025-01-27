@@ -118,7 +118,7 @@ def Visual_Reynolds_Stress():
                 axs.xaxis.set_major_locator(locmin)
                 axs.xaxis.set_minor_formatter(NullFormatter())
                 axs.yaxis.set_major_formatter(formatter2)
-        fig.subplots_adjust(**{"hspace":0.3,"wspace":0.3})
+        fig.subplots_adjust(**{"hspace":0.4,"wspace":0.3})
         fig.savefig(f'Figs/03-STATS/{var}_{int(x_c*100)}.pdf',
                         **figkw
                         )

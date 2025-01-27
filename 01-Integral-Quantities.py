@@ -48,7 +48,7 @@ control_region_cfg = {
                     "xmin":0.25,
                     "xmax":0.86,
                     'color':cc.gray,
-                    "alpha":0.9}
+                    "alpha":0.5}
 
 ### ZOOM IN THE T.E For CF on S.S
 var = 'cf'
@@ -67,8 +67,8 @@ x_c_zoom = 0.80
 control_region_cfg2 = {
                     "xmin":x_c_zoom,
                     "xmax":0.86,
-                    'color':cc.gray,
-                    "alpha":0.9}
+                    'color':cc.grays,
+                    "alpha":0.5}
 
 var_Name = var_name_dict[var]['name']
 legend_list=[]
@@ -117,7 +117,7 @@ for case_name in data.keys():
   axs.set(**var_name_dict[var]['axs'])
   legend_list.append(data[case_name]['label'])
 axs.grid(**grid_setup)
-axs.axvspan(**control_region_cfg)
+# axs.axvspan(**control_region_cfg)
 axs.yaxis.set_major_formatter(formatter2)
 
 
@@ -144,8 +144,8 @@ x_c_zoom_end = 0.95
 control_region_cfg2 = {
                     "xmin":x_c_zoom_start,
                     "xmax":0.86,
-                    'color':cc.gray,
-                    "alpha":0.9}
+                    'color':cc.grays,
+                    "alpha":0.5}
 
 var_Name = var_name_dict[var]['name']
 legend_list=[]

@@ -81,7 +81,7 @@ locmin2 = LogLocator(base=10,subs=np.arange(0,10), numticks=10)
 
 title_setup ={  
                 'loc':'left',
-                'pad':22,
+                'pad':25,
                 } 
 
 single_fig_smaller = {
