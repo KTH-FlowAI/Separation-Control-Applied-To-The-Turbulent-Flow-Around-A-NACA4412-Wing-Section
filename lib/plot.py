@@ -174,7 +174,7 @@ var_name_dict={
                     'axs':{
                         'xlabel':r'$y^+_n$',
                         'xscale':"log",
-                        "xlim":[1.0,2000],
+                        "xlim":[1.0,1200],
                         'ylabel':r'$U^+_t$',
                           },
                   },
@@ -183,7 +183,7 @@ var_name_dict={
                     'axs':{
                         'xlabel':r'$y^+_n$',
                         'xscale':"log",
-                        "xlim":[1.0,2000],
+                        "xlim":[1.0,1200],
                         'ylabel':r'$U_t/U_e$',
                           },
                   },
@@ -193,7 +193,7 @@ var_name_dict={
                           "axs":{
                             'xlabel':r'$y^+_n$',
                             'xscale':"log",
-                            "xlim":[1.0,2000],
+                            "xlim":[1.0,1200],
                             'ylabel':r"$V^+_n$",
                           },
                         
@@ -202,7 +202,7 @@ var_name_dict={
                           "axs":{
                             'xlabel':r'$y^+_n$',
                             'xscale':"log",
-                            "xlim":[1.0,2000],
+                            "xlim":[1.0,1200],
                             'ylabel':r"$V_n/U_e$",
                           },
                         
@@ -496,9 +496,10 @@ def plot_1DPSD(d,fig,axs,
   yy_max = yn[ind_[0]]
   
   axs.plot(xx_max,yy_max,"*",
-          markersize=20,
+          markersize=25,
           c=style['c'],
-          zorder=10,
+          zorder=30,
+          fillstyle='full'
           )
   
   puu_max = np.max(puu)

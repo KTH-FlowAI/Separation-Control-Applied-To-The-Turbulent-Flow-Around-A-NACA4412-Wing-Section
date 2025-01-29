@@ -36,7 +36,7 @@ def name_file(fldr,name,nprof,var):
 NPROF = args.prof 
 VAR   = args.var
 
-Nprofs = [10,9]
+Nprofs = [7,9]
 Vars = ['U',
         'P']
 
@@ -59,7 +59,7 @@ for caseName in data.keys():
 
 var_name = {
               'U':r'${\rm PSD}(u_t)$',
-              'P':r"${\rm PSD}(p')$",
+              'P':r"${\rm PSD}(p)$",
             }
 
 fig, axss = plt.subplots(2,2,figsize=(16,10))

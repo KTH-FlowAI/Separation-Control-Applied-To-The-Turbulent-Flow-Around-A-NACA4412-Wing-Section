@@ -52,7 +52,7 @@ def Visual_Mean_Vel():
     AlphaList = [["(a)","(b)"],["(c)","(d)"],]
     scales=['inner','outer']
     for var in VarList:
-        fig,axss = plt.subplots(**quadra_fig_22_large)
+        fig,axss = plt.subplots(**quadra_fig_22_large2)
         # axss = axss.flatten()
         for jl, scale in enumerate(scales):
             for il, side in enumerate(sides): 
@@ -76,7 +76,7 @@ def Visual_Mean_Vel():
                 axs.xaxis.set_major_locator(locmin)
                 axs.xaxis.set_minor_formatter(NullFormatter())
                 axs.yaxis.set_major_formatter(formatter2)
-        fig.subplots_adjust(**{"hspace":0.3,"wspace":0.3})
+        fig.subplots_adjust(**{"hspace":0.4,"wspace":0.25})
         fig.savefig(f'Figs/03-STATS/{var}_{int(x_c*100)}.pdf',
                         **figkw
                         )
@@ -212,5 +212,7 @@ def Visual_Reynolds_Stress_All():
 
 if __name__ == "__main__":
     Visual_Mean_Vel()
-    Visual_Reynolds_Stress()
-    Visual_Reynolds_Stress_All()
+
+    # Visual_Reynolds_Stress()
+    
+    # Visual_Reynolds_Stress_All()

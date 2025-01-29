@@ -233,18 +233,25 @@ for jl, side in enumerate(sides):
       elif side == 'PS':
         style_dict['linestyle']='--'
       
-      # if 'Case C' in label and side == 'PS' and var =='beta':
-      #   ### Smooth the spikes
-      #   indx = np.where((d['xc'][0,:]>x_start) & (d['xc'][0,:] < x_end))[0]
-        
-      #   for i in indx: 
-      #     v = d[var][0,i]
-      #     print(v)
-      #     # if v > 8 or v < -150: 
-      #     if v > 8 : 
-      #       d[var][0,i] = d[var][0,i+1] 
-      #       # d[var][0,i] = np.nan 
+      if 'Case C' in label and side == 'PS' and var =='beta':
+        ### Smooth the spikes
+        indx = np.where((d['xc'][0,:]>x_start) & (d['xc'][0,:] < x_end))[0]
+        indx_list = []
+        for i in indx: 
+          v = d[var][0,i]
+          if v > 8 or v < -18: 
+            x_l = d['xc'][0,i]
+            print(x_l, v)
+          # if v > 8 : 
+            d[var][0,i] = d[var][0,i-1] 
+          #   # d[var][0,i] = np.nan 
+            indx_list.append(i)
 
+      if 'Case C' in label and side == 'PS':
+          for i in indx_list:
+            d[var][0,i] = d[var][0,i-1] 
+          # 
+      
       fig,axs = plot_integral_quantities(d,
                                         fig,axs,x_c,x_end,
                                         var,var_Name,style_dict,
@@ -298,9 +305,9 @@ for jl, side in enumerate(sides):
         xx = data_['xc'][0,:]
         ind = np.where(data_['xc'][0,:] > xLoc)[0][0]
         x_loc =xx[ind]
-        print(ind,x_loc)
+        # print(ind,x_loc)
         var_x = data_[var][0,ind]
-        print(f"Case {case_name} At x/c = {x_loc}: {var} = {var_x}")
+        # print(f"Case {case_name} At x/c = {x_loc}: {var} = {var_x}")
         sum_table[var].append(var_x)
     
   df = pd.DataFrame(sum_table)
