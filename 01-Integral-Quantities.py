@@ -216,11 +216,15 @@ for jl, side in enumerate(sides):
     x_c = 0.16
     var_Name = var_name_dict[var]
     legend_list=[]
+
     for case_name in data.keys():
+      d = data[case_name][f'data_{side}']
       if 'ref'  in case_name:
         x_end = 0.86
       else:
         x_end = 0.95
+      
+      label = data[case_name]['label']
       style_dict = data[case_name]['style']
       style_dict['lw']  = 3.5
       style_dict['marker']  = None
@@ -229,19 +233,32 @@ for jl, side in enumerate(sides):
       elif side == 'PS':
         style_dict['linestyle']='--'
       
-      fig,axs = plot_integral_quantities(data[case_name][f'data_{side}'],
+      # if 'Case C' in label and side == 'PS' and var =='beta':
+      #   ### Smooth the spikes
+      #   indx = np.where((d['xc'][0,:]>x_start) & (d['xc'][0,:] < x_end))[0]
+        
+      #   for i in indx: 
+      #     v = d[var][0,i]
+      #     print(v)
+      #     # if v > 8 or v < -150: 
+      #     if v > 8 : 
+      #       d[var][0,i] = d[var][0,i+1] 
+      #       # d[var][0,i] = np.nan 
+
+      fig,axs = plot_integral_quantities(d,
                                         fig,axs,x_c,x_end,
                                         var,var_Name,style_dict,
                                         interval=4
                                         )
       
+
       legend_list.append(data[case_name]['label'])
     axs.set(**var_name_dict[var]['axs'])
     axs.grid(**grid_setup)
     axs.axvspan(**control_region_cfg)
     axs.set_title(AlphaList[0][il],**title_setup)
     # axs.yaxis.set_major_formatter(formatter3)
-fig.subplots_adjust(**{"hspace":0.4,"wspace":0.3})
+fig.subplots_adjust(**{"hspace":0.4,"wspace":0.25})
 fig.savefig(f'Figs/02-BL-DEVELP/BL_{il+1}VARS.jpg',
                 **figkw
                 )
@@ -277,9 +294,7 @@ for jl, side in enumerate(sides):
   for kl, case_name in enumerate(data.keys()):
     sum_table['case'].append(data[case_name][f'label'])
     for il, var in enumerate(VarList):
-        
         data_ = data[case_name][f'data_{side}']
-        
         xx = data_['xc'][0,:]
         ind = np.where(data_['xc'][0,:] > xLoc)[0][0]
         x_loc =xx[ind]

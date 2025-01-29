@@ -49,7 +49,7 @@ Mean Velocity profiles at different streamwise location Inner and outer scale
 """
 def Visual_Mean_Vel():
     VarList =['U','V']
-    AlphaList = ["(a)","(b)","(c)","(d)",]
+    AlphaList = [["(a)","(b)"],["(c)","(d)"],]
     scales=['inner','outer']
     for var in VarList:
         fig,axss = plt.subplots(**quadra_fig_22_large)
@@ -71,7 +71,7 @@ def Visual_Mean_Vel():
                     legend_list.append(data[case_name]['label'])
                 
                 axs.set(**var_name_dict[var+scale]['axs'])
-                axs.set_title(AlphaList[(jl-1)*2+il] + " " + rf"$x/c={x_c}$"+", "+f"{side_text[side]}",**title_setup)
+                axs.set_title(AlphaList[il][jl] + " " + rf"$x/c={x_c}$"+", "+f"{side_text[side]}",**title_setup)
                 axs.xaxis.set_minor_locator(locmin)
                 axs.xaxis.set_major_locator(locmin)
                 axs.xaxis.set_minor_formatter(NullFormatter())
@@ -92,7 +92,7 @@ def Visual_Reynolds_Stress():
             #   "vv",'ww','uv',
               ]
     scales=['inner','outer']
-    AlphaList = ["(a)","(b)","(c)","(d)",]
+    AlphaList = [["(a)","(b)"],["(c)","(d)"],]
     
     for var in VarList:
         fig,axss = plt.subplots(**quadra_fig_22_large2)
@@ -113,7 +113,7 @@ def Visual_Reynolds_Stress():
                     legend_list.append(data[case_name]['label'])
                 
                 axs.set(**var_name_dict[var+scale]['axs'])
-                axs.set_title(AlphaList[(jl-1)*2+il] + " " + rf"$x/c={x_c}$"+", "+f"{side_text[side]}",**title_setup)
+                axs.set_title(AlphaList[il][jl] + " " + rf"$x/c={x_c}$"+", "+f"{side_text[side]}",**title_setup)
                 axs.xaxis.set_minor_locator(locmin)
                 axs.xaxis.set_major_locator(locmin)
                 axs.xaxis.set_minor_formatter(NullFormatter())

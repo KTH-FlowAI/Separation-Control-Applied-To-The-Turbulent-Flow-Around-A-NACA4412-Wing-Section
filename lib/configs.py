@@ -107,7 +107,7 @@ data=     {
                     'label':'Case C',
                     'config':{
                         'region':[(0.25,0.86),(0.25,0.86)],
-                        'intensity':[-0.5/100,0.5/100],  
+                        'intensity':[-1.0/100,1.0/100],  
                         "freq":[0.0,0.0],
                         'side':[True,True], # (S.S,P.S), 1==Yes, 0==No
                               },
@@ -187,7 +187,7 @@ data_clcd=     {
                     'label':'Case C',
                     'config':{
                         'region':[(0.25,0.86),(0.25,0.86)],
-                        'intensity':[-0.5/100,0.5/100],  
+                        'intensity':[-1.0/100,1.0/100],  
                         "freq":[0.0,0.0],
                         'side':[True,True], # (S.S,P.S), 1==Yes, 0==No
                               },

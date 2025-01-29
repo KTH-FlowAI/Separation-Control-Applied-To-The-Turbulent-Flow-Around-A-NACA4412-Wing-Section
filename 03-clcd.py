@@ -175,25 +175,24 @@ for il, case in enumerate(data.keys()):
               linestyle='none',
               marker=style_dict['marker'],
               c=style_dict['c'],
-              markersize=15)
+              markersize=25)
       legend_list.append(Line2D([0],[0],
                             linestyle='none',
                             marker=style_dict['marker'],
                             c=style_dict['c'],
-                            markersize=10,
+                            markersize=12,
                             label=labelName
                                   ))
 # axs.xaxis.set_major_formatter(formatter2)
-axs.grid(**grid_setup)
 axs.set(**{
           'xlabel':r"$C_d$",
           # 'xlim':[0.051,0.056],
           "ylabel":r"$C_l$",
-          # 'ylim':[1.310,1.345],
+          'ylim':[1.30,1.5],
           })
 axs.axhline(df["cl"][0]     ,linestyle='-.',color = cc.grays)
 axs.axvline(df["cd"][0]     ,linestyle='-.',color = cc.grays)
-
+axs.grid(**grid_setup)
 axs.legend(
   handles = legend_list,
   loc ='upper left',
@@ -202,7 +201,7 @@ axs.legend(
   prop={'size':15}
   )
 axs.set_title("(b)",**title_setup)
-axs.grid(which='major')
+# axs.grid(which='major')
 fig.tight_layout()
 fig.savefig('Figs/01-CTRL-EFFECT/cl_VS_cd.jpg',**figkw)
 fig.savefig('Figs/01-CTRL-EFFECT/cl_VS_cd.pdf',**figkw)
@@ -260,7 +259,7 @@ axs.set(**{
           'xlabel':r"$C_{\mu}$",
           "ylabel":r"$l_{\rm sep}$",
           'ylim':[0.0,0.15],
-          'xlim':[-1e-3,1.4e-2],
+          'xlim':[-1e-3,2.6e-2],
           # "title":"Separation Assessment " + f"($C_f < 0$)",
           })
 axs.legend(

@@ -317,12 +317,14 @@ var_name_dict={
                           "axs":{
                             'xlabel':r'$x/c$',
                             'ylabel':r'$Re_{\tau}$',
+                            'yscale':'log',
                           }
                           },
               'Retheta':{"name":            r"$Re_{\theta}$",
                           "axs":{
                             'xlabel':r'$x/c$',
                             'ylabel':r'$Re_{\theta}$',
+                            'yscale':'log',
                           }
                           },
               
