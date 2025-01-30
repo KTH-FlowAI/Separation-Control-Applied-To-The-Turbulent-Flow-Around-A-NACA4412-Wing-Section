@@ -128,10 +128,10 @@ def Visual_Reynolds_Stress():
 
 def Visual_Reynolds_Stress_All():
     VarList =[
-            # 'uu',
+            'uu',
             "vv",'ww','uv']
     NameList =[
-        # r'$\overline{u_t^2}$',
+        r'$\overline{u_t^2}$',
         r'$\overline{v_n^2}$',r'$\overline{w^2}$',r'$\overline{u_tv_n}$',
             ]
     # VarList =["vv",'ww','uv']
@@ -213,6 +213,6 @@ def Visual_Reynolds_Stress_All():
 if __name__ == "__main__":
     Visual_Mean_Vel()
 
-    # Visual_Reynolds_Stress()
+    Visual_Reynolds_Stress()
     
-    # Visual_Reynolds_Stress_All()
+    Visual_Reynolds_Stress_All()

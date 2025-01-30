@@ -274,7 +274,9 @@ var_name_dict={
                             'xlabel':r'$y^+_n$',
                             'xscale':"log",
                             'xlim':[0.5,500],
-                            'ylabel':r"$\overline{v_n^2}^+$" + ", " + \
+                            'ylabel':
+                                    r"$\overline{u_t^2}^+$" + ", " + \
+                                    r"$\overline{v_n^2}^+$" + ", " + \
                                     r"$\overline{w^2}^+$" + ", " +\
                                     r"$\overline{u_tv_n}^+$",
                           }
@@ -285,7 +287,9 @@ var_name_dict={
                             'xlabel':r'$y^+_n$',
                             'xscale':"log",
                             'xlim':[0.5,800],
-                            'ylabel':r"$\overline{v_n^2}/U^2_e$" + ", " + \
+                            'ylabel':
+                                    r"$\overline{u_t^2}/U^2_e$" + ", " + \
+                                    r"$\overline{v_n^2}/U^2_e$" + ", " + \
                                     r"$\overline{w^2}/U^2_e$" + ", " +\
                                     r"$\overline{u_tv_n}/U^2_e$",
                           }
