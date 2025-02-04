@@ -57,13 +57,14 @@ fig,axss = plt.subplots(1,2,figsize=(18,8))
 axs = axss[0]
 axins = inset_axes(axs, 
                   width="130%", 
-                  height="35%",
-                  bbox_to_anchor=(  0.7,  0.55,   0.3,   0.4),
+                  height="60%",
+                  bbox_to_anchor=(  0.68,  0.57,   0.3,   0.4),
                   bbox_transform=axs.transAxes,
                           )
 x_start = 0.1,
-x_end  = 0.95
-x_c_zoom = 0.80
+x_end  = 0.99
+x_c_zoom = 0.8
+x_c_end = 1.1
 control_region_cfg2 = {
                     "xmin":x_c_zoom,
                     "xmax":0.86,
@@ -77,21 +78,23 @@ for case_name in data.keys():
   style_dict['marker'] = None
   style_dict['linestyle'] = "-"
   style_dict['lw'] = 3.0
-
   fig,axs = plot_integral_quantities(data[case_name]['data_SS'],fig,axs,
                                     x_start,x_end,
                                     var,var_Name,style_dict,interval=3)
   axs.set(**var_name_dict[var]['axs'])
   fig,axins = plot_integral_quantities(data[case_name]['data_SS'],fig,axins,
-                                      x_c_zoom,0.99,
+                                      x_c_zoom,x_c_end,
                                       var,var_Name,style_dict,with_set=False)
   legend_list.append(data[case_name]['label'])
+
 axs.yaxis.set_major_formatter(formatter2)
 axs.grid(**grid_setup)
 axs.set_title('(a)',**title_setup)
 axs.axvspan(**control_region_cfg)
 axins.axvspan(**control_region_cfg2)
-axins.set_ylim([-0.001,0.002])
+axins.set_ylim([-0.001,0.001])
+axins.set_xticks([0.8,0.9,1.0])
+
 axins.yaxis.set_major_formatter(formatter2)
 axs.axhline(0,**support_line1)
 axins.axhline(0,**support_line1)
@@ -133,13 +136,13 @@ axs = axss[1]
 axins = inset_axes(axs,
                           width="200%", 
                           height="75%",
-                          bbox_to_anchor=(  0.75,  0.2,   0.3,   0.4),
+                          bbox_to_anchor=(  0.75,  0.15,   0.3,   0.4),
                           bbox_transform=axs.transAxes,
                           )
 x_start = 0.0,
 x_end  = 1.0
-x_c_zoom_start = 0.75
-x_c_zoom_end = 0.95
+x_c_zoom_start = 0.82
+x_c_zoom_end = 1.0
 
 control_region_cfg2 = {
                     "xmin":x_c_zoom_start,
@@ -150,6 +153,11 @@ control_region_cfg2 = {
 var_Name = var_name_dict[var]['name']
 legend_list=[]
 for case_name in data.keys():
+
+  ## Enclose the Cp 
+  data[case_name]['data_PS']['cp'][0,1] = data[case_name]['data_SS']['cp'][0,0]
+  # data[case_name]['data_PS']['cp'][0,-1] = data[case_name]['data_SS']['cp'][0,-1]
+
   fig,axs = plot_integral_quantities(data[case_name]['data_SS'],fig,axs,
                                     x_start,x_end,
                                     var,var_Name,data[case_name]['style'])

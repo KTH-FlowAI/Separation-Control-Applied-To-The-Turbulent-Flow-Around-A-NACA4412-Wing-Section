@@ -78,6 +78,7 @@ formatter3.set_powerlimits([-2,4])
 ## Syntax for set log grid 
 locmin = LogLocator(base=10,subs=np.arange(0,10), numticks=10)
 locmin2 = LogLocator(base=10,subs=np.arange(0,10), numticks=10)
+locmin3 = LogLocator(base=10,subs=np.arange(0,10), numticks=10)
 
 title_setup ={  
                 'loc':'left',
@@ -299,14 +300,17 @@ var_name_dict={
               'cf'     :{"name":r"$c_f$",
                           "axs":{
                             'xlabel':r'$x/c$',
-                            'xlim':[0.11,0.95],
+                            'xlim':[0.11,0.99],
                             'ylabel':r'$c_f$',
+                            'ylim':[-0.2e-2,2.8e-2]
                           }
                           },
               'cp'     :{"name":r"$c_p$",
                           "axs":{
                             'xlabel':r'$x/c$',
                             'ylabel':r'$c_p$',
+                            'ylim':[-4,1.1],
+                            
                           }
                           },
               'beta'   :{"name":r"$\beta$",
@@ -322,11 +326,13 @@ var_name_dict={
                             'xlabel':r'$x/c$',
                             'ylabel':r'$Re_{\tau}$',
                             'yscale':'log',
+                            "xlim":[0.11,0.95],
                           }
                           },
               'Retheta':{"name":            r"$Re_{\theta}$",
                           "axs":{
                             'xlabel':r'$x/c$',
+                            "xlim":[0.11,0.95],
                             'ylabel':r'$Re_{\theta}$',
                             'yscale':'log',
                           }
@@ -335,6 +341,7 @@ var_name_dict={
               'H12':{"name":            r"$H_{12}$",
                           "axs":{
                             'xlabel':r'$x/c$',
+                            "xlim":[0.11,0.95],
                             'ylabel':r'$H_{12}$',
                           }
                           },
@@ -480,11 +487,12 @@ def annot_max(xmax,ymax,text,c,text_loc, ax=None,):
 def plot_1DPSD(d,fig,axs,
               style,
               levels,
-              text_loc=(0.9,0.96)
+              text_loc=(0.9,0.96),
+              scale='inner'
               ):
-  lmd = d['lmd']
-  yn  = d['yn']
-  puu = d['puu']
+  lmd = d[f'lmd_{scale}']
+  yn  = d[f'yn_{scale}']
+  puu = d[f'puu']
   
   axs.contour(
                   lmd,
@@ -498,7 +506,7 @@ def plot_1DPSD(d,fig,axs,
                           shape=puu.shape)
   xx_max = lmd[ind_[1]]
   yy_max = yn[ind_[0]]
-  
+  print(f"energy peak: LambdaZ = {xx_max}; y_n = {yy_max}")
   axs.plot(xx_max,yy_max,"*",
           markersize=25,
           c=style['c'],

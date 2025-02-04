@@ -54,6 +54,7 @@ data=     {
                         "freq":[0.0,0.0],
                         'side':[False,False], # (S.S,P.S), 1==Yes, 0==No
                 },
+                        "d99":0.0477,
                         },
         
         'control':{
@@ -73,6 +74,7 @@ data=     {
                         "freq":[0.0,0.0],
                         'side':[True,True], # (S.S,P.S), 1==Yes, 0==No
                               },
+                        "d99":0.0438,
                     },
         
         'control1':{
@@ -92,6 +94,7 @@ data=     {
                         "freq":[0.0,0.0],
                         'side':[True,True], # (S.S,P.S), 1==Yes, 0==No
                               },
+                        "d99":0.0493,
                     },
 
         'control2':{
@@ -110,6 +113,45 @@ data=     {
                         'intensity':[-1.0/100,1.0/100],  
                         "freq":[0.0,0.0],
                         'side':[True,True], # (S.S,P.S), 1==Yes, 0==No
+                              },
+                "d99":0.1080,
+                    },
+        'control3':{
+                    'fileName':'CTRL_025-086XC_0.25%Uinf_SS-SUCTION/',
+                    'style':{
+                            'lw':lw2,
+                            'c':cc.green,
+                            'linestyle':ls3,
+                            'marker':mktype5,
+                            'markersize':mksize1,
+                            'fillstyle':'none',
+                            },
+                    'label':'Case D',
+                    'config':{
+                        'region':[(0.25,0.86),(0.0,0.0)],
+                        'intensity':[-0.25/100,0.0],  
+                        "freq":[0.0,0.0],
+                        'side':[True,False], # (S.S,P.S), 1==Yes, 0==No
+                              },
+
+                    },
+
+        'control4':{
+                    'fileName':'CTRL_025-086XC_0.25%Uinf_PS-BLOWING/',
+                    'style':{
+                            'lw':lw2,
+                            'c':cc.deeppurple,
+                            'linestyle':ls3,
+                            'marker':mktype6,
+                            'markersize':mksize1,
+                            'fillstyle':'none',
+                            },
+                    'label':'Case E',
+                    'config':{
+                        'region':[(0.0,0.0),(0.25,0.86)],
+                        'intensity':[0.0,0.25/100],  
+                        "freq":[0.0,0.0],
+                        'side':[False,True], # (S.S,P.S), 1==Yes, 0==No
                               },
 
                     },

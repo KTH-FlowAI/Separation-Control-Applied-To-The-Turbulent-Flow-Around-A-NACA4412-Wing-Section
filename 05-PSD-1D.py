@@ -17,6 +17,7 @@ Available: Prof#2,6,7,8,9
 parser = argparse.ArgumentParser()
 parser.add_argument('--prof',default=4,type=int)
 parser.add_argument('--var',default="U",type=str)
+parser.add_argument('--scale',default="inner",type=str)
 args = parser.parse_args()
 plt_setUp_Smaller()
 
@@ -35,6 +36,7 @@ def name_file(fldr,name,nprof,var):
 
 def post_process_Spectra(out):
     lstar = out['lstar'].squeeze()
+    d99 = out['d99']
     utau  = out['utau'].squeeze()
     lmd = out['lambda'].squeeze()
     yn  = out['yn'].squeeze()
@@ -47,11 +49,15 @@ def post_process_Spectra(out):
 
     for iy in range(len(yn)):
       puu[iy,:] = fact * prem * puu[iy,:]/utau**2
-
+    
 
     data = {
-          'lmd':lmd[1:]/lstar,
-          'yn':yn/lstar,
+          'lmd_inner':lmd[1:]/lstar,
+          'yn_inner':yn/lstar,
+          
+          'lmd_outer':lmd[1:]/d99,
+          'yn_outer':yn/d99,
+
           'puu':puu[:,1:],
               }
     
@@ -59,6 +65,7 @@ def post_process_Spectra(out):
 
 NPROF = args.prof 
 VAR   = args.var
+scale = args.scale
 #######################################
 # OVER SUCTION/PRESSURE SIDE 
 #######################################
@@ -71,7 +78,9 @@ for caseName in data.keys():
 
     fname= name_file(fldr,name,NPROF,VAR)
     print(fname)
-    data[caseName][f'data'] = post_process_Spectra(sio.loadmat(fname))
+    d = sio.loadmat(fname)
+    d['d99'] = data[caseName]['d99']
+    data[caseName][f'data'] = post_process_Spectra(d)
     print(f"[IO] DATA: {fname}")
 
 
@@ -82,17 +91,26 @@ for kl, case_name in enumerate(reversed(data.keys())):
     d = data[case_name]['data']
     style_dict = data[case_name]['style']
     text_loc=(0.9-kl*0.1,0.9-kl*0.1)
-    fig,axs = plot_1DPSD(d,fig,axs,style_dict,levels,text_loc)
+    fig,axs = plot_1DPSD(d,fig,axs,style_dict,levels,text_loc,scale)
 
-
-axs.set(**{
-      'xscale':'log',
-      'xlabel':r'$\lambda^+_z$',
-      'xlim':[20,2000],
-      'yscale':'log',    
-      'ylabel':r'$y^+_n$',
-      'ylim':[1,500],
-            })
+if scale == "inner":
+    axs.set(**{
+        'xscale':'log',
+        'xlabel':r'$\lambda^+_z$',
+        'xlim':[20,2000],
+        'yscale':'log',    
+        'ylabel':r'$y^+_n$',
+        'ylim':[1,500],
+                })
+elif scale == "outer":
+    axs.set(**{
+        'xscale':'log',
+        'xlabel':r'$\lambda_z/\delta_{99}$',
+        # 'xlim':[20,2000],
+        'yscale':'log',    
+        'ylabel':r'$y_n/\delta_{99}$',
+        'ylim':[1e-3,1e0],
+                })
 
 axs.xaxis.set_minor_locator(locmin)
 axs.xaxis.set_major_locator(locmin)        
@@ -100,7 +118,6 @@ axs.yaxis.set_minor_locator(locmin)
 axs.yaxis.set_major_locator(locmin)
 axs.grid(**grid_setup)
 
-fig.savefig(f'Figs/04-FFT/Prof_SP1D_Prof4.jpg',**{'dpi':300,'transparent':True,'bbox_inches':'tight'})
-fig.savefig(f'Figs/04-FFT/Prof_SP1D_Prof4.pdf',**{'dpi':300,'transparent':True,'bbox_inches':'tight'})
+fig.savefig(f'Figs/04-FFT/Prof_SP1D_Prof{args.prof}.jpg',**{'dpi':300,'transparent':True,'bbox_inches':'tight'})
+fig.savefig(f'Figs/04-FFT/Prof_SP1D_Prof{args.prof}.pdf',**{'dpi':300,'transparent':True,'bbox_inches':'tight'})
 print('[IO] Spectra Figure Saved')
-

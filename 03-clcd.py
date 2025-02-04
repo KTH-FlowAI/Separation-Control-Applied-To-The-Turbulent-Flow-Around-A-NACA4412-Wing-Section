@@ -51,7 +51,7 @@ def cal_Cmu(ctrl_config):
     lx = ctrl_config['region'][0][0] - ctrl_config['region'][0][1]
     v_c = ctrl_config['intensity'][0]
     S = lz * lx 
-    m_ss  = rho *  v_c * S
+    m_ss  = rho *  v_c **2 * S
   else: 
     m_ss = 0
 
@@ -60,7 +60,7 @@ def cal_Cmu(ctrl_config):
     lx = ctrl_config['region'][1][0] - ctrl_config['region'][1][1]
     v_c = ctrl_config['intensity'][1]
     S = lz * lx 
-    m_ps  = rho *  v_c * S
+    m_ps  = rho *  v_c **2  * S
   else: 
     m_ps = 0
 
@@ -234,8 +234,15 @@ for var in VarList:
     cf = data[case_name][f'data_{side}'][var].squeeze()
     xx = data[case_name][f'data_{side}']['xc'].squeeze()
     Cmu = data[case_name]["Cmu"]
-    ind = np.where((cf>=0))[0][-1]-2
-    x_loc_sep = 1 - xx[ind]
+    # ind = np.where((cf>=0))[0][-1]-2
+    # cf -=1e-3
+    # ind = np.where((cf>=0))[0][-1]
+    if 'reference'in case_name:
+      ind = np.where((cf>0))[0][-1]-3
+    else:
+      ind = np.where((cf>0))[0][-1]
+    
+    x_loc_sep = 0.99 - xx[ind]
 
     style_dict = data[case_name]['style']
     labelName = data[case_name]['label']
@@ -253,13 +260,13 @@ for var in VarList:
                         markersize=8,
                         label=labelName
                               ))
-axs.xaxis.set_major_formatter(formatter2)
-axs.grid(**grid_setup)
 axs.set(**{
           'xlabel':r"$C_{\mu}$",
           "ylabel":r"$l_{\rm sep}$",
-          'ylim':[0.0,0.15],
-          'xlim':[-1e-3,2.6e-2],
+          'ylim':[-0.03,0.15],
+          # 'xlim':[-3e-5,3.5e-4],
+          'xlim':[-1.5e-5,3e-4],
+          # 'xscale':'symlog'
           # "title":"Separation Assessment " + f"($C_f < 0$)",
           })
 axs.legend(
@@ -268,6 +275,11 @@ axs.legend(
         # ncol=len(legend_list)//2,
         prop={'size':15}
           )
+# axs.xaxis.set_major_locator(locmin)
+# axs.xaxis.set_ticks([0,1.0e-5,1e-4,3e-4])
+axs.xaxis.set_major_formatter(formatter2)
+axs.grid(**grid_setup)
+
 # axs.set_title("(c)",**title_setup)
 fig.savefig(f'Figs/01-CTRL-EFFECT/{side}_Separation_Points.jpg',
               **figkw
