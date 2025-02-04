@@ -121,7 +121,7 @@ data=     {
                     'style':{
                             'lw':lw2,
                             'c':cc.green,
-                            'linestyle':ls3,
+                            'linestyle':ls1,
                             'marker':mktype5,
                             'markersize':mksize1,
                             'fillstyle':'none',
@@ -141,7 +141,7 @@ data=     {
                     'style':{
                             'lw':lw2,
                             'c':cc.deeppurple,
-                            'linestyle':ls3,
+                            'linestyle':ls1,
                             'marker':mktype6,
                             'markersize':mksize1,
                             'fillstyle':'none',

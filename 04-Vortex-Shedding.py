@@ -62,7 +62,7 @@ var_name = {
               'P':r"${\rm PSD}(p)$",
             }
 
-fig, axss = plt.subplots(2,2,figsize=(16,10))
+fig, axss = plt.subplots(2,2,figsize=(18,12))
 AlphaList = [["(a)","(c)"],["(b)","(d)"],]
 for kl, caseName in enumerate(reversed(data.keys())):
   for il, nprof in enumerate(Nprofs):
@@ -70,7 +70,14 @@ for kl, caseName in enumerate(reversed(data.keys())):
       axs = axss[jl,il]
       d = data[caseName][f'data_{nprof}_{var}']
       style=data[caseName]['style']
-      fig,axs=plot_FFT(d,fig,axs,style,text_loc=(0.9-kl*0.1,0.9-kl*0.1))
+      
+      if ('3' in caseName) or ('4' in caseName):
+        d['freq'] = np.squeeze(d['freq'])
+        d['psd'] = np.squeeze(d['psd'])
+        d['freq'] = np.concatenate([np.array([0.0,]).reshape(-1,),d['freq']])
+        d['psd']  = np.concatenate([np.array([0.0,]).reshape(-1,),d['psd']])
+      
+      fig,axs=plot_FFT(d,fig,axs,style,text_loc=(0.9-kl*0.05,0.99-kl*0.1))
       xc = d['xloc'][0][0]
       
       axs.grid(**grid_setup)

@@ -230,7 +230,7 @@ for jl, side in enumerate(sides):
       if 'ref'  in case_name:
         x_end = 0.86
       else:
-        x_end = 0.95
+        x_end = 0.92
       
       label = data[case_name]['label']
       style_dict = data[case_name]['style']

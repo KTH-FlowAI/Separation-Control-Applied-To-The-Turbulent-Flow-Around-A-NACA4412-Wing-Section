@@ -157,7 +157,7 @@ def Visual_Reynolds_Stress_All():
                                     stylelist,
                                     grid_setup,
                                     scale=scale,
-                                    interval=100,)
+                                    interval=80,)
                     
             axs.set(**var_name_dict['uiuj'+scale]['axs'])
             axs.set_title(AlphaList[jl][il] + " " + rf"$x/c={x_c}$"+", "+f"{side_text[side]}",**title_setup)
@@ -176,10 +176,12 @@ def Visual_Reynolds_Stress_All():
 
         legend_list.append(Line2D([0],[0],
                             color=cc.grays,
-                            lw  = 2.5, 
+                            lw  = 1.5, 
                             ls  = st['linestyle'],
                             marker = st['marker'] if case_name !='Ref' else None,
+                            markersize=6,
                             fillstyle=st['fillstyle'],
+
                             label=label,
                             )
                             )

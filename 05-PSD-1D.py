@@ -36,7 +36,7 @@ def name_file(fldr,name,nprof,var):
 
 def post_process_Spectra(out):
     lstar = out['lstar'].squeeze()
-    d99 = out['d99']
+    # d99 = out['d99']
     utau  = out['utau'].squeeze()
     lmd = out['lambda'].squeeze()
     yn  = out['yn'].squeeze()
@@ -55,8 +55,8 @@ def post_process_Spectra(out):
           'lmd_inner':lmd[1:]/lstar,
           'yn_inner':yn/lstar,
           
-          'lmd_outer':lmd[1:]/d99,
-          'yn_outer':yn/d99,
+        #   'lmd_outer':lmd[1:]/d99,
+        #   'yn_outer':yn/d99,
 
           'puu':puu[:,1:],
               }
@@ -79,7 +79,7 @@ for caseName in data.keys():
     fname= name_file(fldr,name,NPROF,VAR)
     print(fname)
     d = sio.loadmat(fname)
-    d['d99'] = data[caseName]['d99']
+    # d['d99'] = data[caseName]['d99']
     data[caseName][f'data'] = post_process_Spectra(d)
     print(f"[IO] DATA: {fname}")
 

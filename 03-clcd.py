@@ -262,7 +262,7 @@ for var in VarList:
                               ))
 axs.set(**{
           'xlabel':r"$C_{\mu}$",
-          "ylabel":r"$l_{\rm sep}$",
+          "ylabel":r"$\ell_{\rm sep}$",
           'ylim':[-0.03,0.15],
           # 'xlim':[-3e-5,3.5e-4],
           'xlim':[-1.5e-5,3e-4],

@@ -316,7 +316,7 @@ var_name_dict={
               'beta'   :{"name":r"$\beta$",
                           "axs":{
                             'xlabel':r'$x/c$',
-                            "xlim":[0.11,0.95],
+                            # "xlim":[0.11,0.95],
                             'ylabel':r'$\beta$',
                             'yscale':"symlog",
                           }
@@ -326,13 +326,13 @@ var_name_dict={
                             'xlabel':r'$x/c$',
                             'ylabel':r'$Re_{\tau}$',
                             'yscale':'log',
-                            "xlim":[0.11,0.95],
+                            # "xlim":[0.11,0.95],
                           }
                           },
               'Retheta':{"name":            r"$Re_{\theta}$",
                           "axs":{
                             'xlabel':r'$x/c$',
-                            "xlim":[0.11,0.95],
+                            # "xlim":[0.11,0.95],
                             'ylabel':r'$Re_{\theta}$',
                             'yscale':'log',
                           }
@@ -341,7 +341,7 @@ var_name_dict={
               'H12':{"name":            r"$H_{12}$",
                           "axs":{
                             'xlabel':r'$x/c$',
-                            "xlim":[0.11,0.95],
+                            # "xlim":[0.11,0.95],
                             'ylabel':r'$H_{12}$',
                           }
                           },
@@ -516,10 +516,10 @@ def plot_1DPSD(d,fig,axs,
   
   puu_max = np.max(puu)
   text = "{:.2e}".format(puu_max)
-  axs = annot_max(xx_max,yy_max,
-                  text=text,
-                  text_loc=text_loc,
-                  c=style['c'],ax=axs)
+  # axs = annot_max(xx_max,yy_max,
+  #                 text=text,
+  #                 text_loc=text_loc,
+  #                 c=style['c'],ax=axs)
 
   return fig,axs
 
