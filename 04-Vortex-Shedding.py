@@ -38,7 +38,9 @@ VAR   = args.var
 
 Nprofs = [7,9]
 Vars = ['U',
-        'P']
+        'P',
+        "V"
+        ]
 
 #######################################
 # OVER SUCTION/PRESSURE SIDE 
@@ -56,41 +58,72 @@ for caseName in data.keys():
         data[caseName][f'data_{nprof}_{var}'] = sio.loadmat(fname)
         print(f"[IO] DATA: {fname}")
 
-
+# data_ = data['control3'][f'data_{nprof}_{var}']
+# data['control3'][f'data_{nprof}_{var}']=data['control4'][f'data_{nprof}_{var}']
+# data['control4'][f'data_{nprof}_{var}']=data_
+Vars = ['U',
+        
+        "P"
+        ]
 var_name = {
               'U':r'${\rm PSD}(u_t)$',
+              'V':r'${\rm PSD}(v_n)$',
               'P':r"${\rm PSD}(p)$",
             }
 
-fig, axss = plt.subplots(2,2,figsize=(18,12))
-AlphaList = [["(a)","(c)"],["(b)","(d)"],]
-for kl, caseName in enumerate(reversed(data.keys())):
-  for il, nprof in enumerate(Nprofs):
-    for jl, var in enumerate(Vars):
-      axs = axss[jl,il]
-      d = data[caseName][f'data_{nprof}_{var}']
-      style=data[caseName]['style']
-      
-      if ('3' in caseName) or ('4' in caseName):
-        d['freq'] = np.squeeze(d['freq'])
-        d['psd'] = np.squeeze(d['psd'])
-        d['freq'] = np.concatenate([np.array([0.0,]).reshape(-1,),d['freq']])
-        d['psd']  = np.concatenate([np.array([0.0,]).reshape(-1,),d['psd']])
-      
-      fig,axs=plot_FFT(d,fig,axs,style,text_loc=(0.9-kl*0.05,0.99-kl*0.1))
-      xc = d['xloc'][0][0]
-      
-      axs.grid(**grid_setup)
-      axs.set(**var_name_dict['psd']['axs'])
-      axs.set_ylabel(var_name[var])
-      axs.set_title( AlphaList[il][jl]  +\
-                    " " + \
-                    rf'$x/c = {xc} $',**title_setup)
-      axs.xaxis.set_minor_locator(locmin2)
-      axs.xaxis.set_major_locator(locmin2)        
-      # axs.yaxis.set_minor_locator(locmin)
-      # axs.yaxis.set_major_locator(locmin)
-fig.subplots_adjust(**{"wspace":0.2,'hspace':0.5})
+# del data['control1']
+# del data['control2']
 
-fig.savefig(save_dir+f'FFT_4.jpg',**{"dpi":300,'transparent':True,'bbox_inches':'tight'})
-fig.savefig(save_dir+f'FFT_4.pdf',**{"dpi":300,'transparent':True,'bbox_inches':'tight'})
+# fig, axss = plt.subplots(2,2,figsize=(20,12))
+# AlphaList = [["(a)","(c)"],["(b)","(d)"],]
+for il, nprof in enumerate(Nprofs):
+  for jl, var in enumerate(Vars):
+    fig,axs=plt.subplots(**{'figsize':(8,4)})
+    legend_list=[]
+
+    for kl, caseName in enumerate(reversed(data.keys())):
+      d = data[caseName][f'data_{nprof}_{var}']
+      style_dict=data[caseName]['style']
+      # if ('control1' not in caseName) or ('control2' not in caseName):
+      fig,axs=plot_FFT(d,fig,axs,style_dict,
+                        text_loc=(0.99-kl*0.01,0.99-kl*0.15))
+      legend_list.append(Rectangle(xy=(1, 0), width=3, height=3,
+                            color=style_dict['c'],
+                            label=data[caseName]['label']))
+      xc = d['xloc'][0][0]
+    
+    legend_list.append(Line2D([0],[0],
+                        color=cc.grays,
+                        lw  = 1.5, 
+                        ls  = "None",
+                        marker = "*",
+                        markersize=12,
+                        label='Maxima',)
+                    )
+
+    legend_list.append(Line2D([0],[0],
+                        color=cc.grays,
+                        lw  = 2, 
+                        ls  = "-",
+                        marker = "None",
+                        # markersize=12,
+                        label='Spectra',)
+                    )
+    legend_list.reverse()
+    axs.grid(**grid_setup)
+    axs.set(**var_name_dict['psd']['axs'])
+    axs.set_ylabel(var_name[var])
+    axs.xaxis.set_minor_locator(locmin2)
+    axs.xaxis.set_major_locator(locmin2)   
+
+    axs.legend(handles=legend_list,
+                            loc='upper center', 
+                                            bbox_to_anchor=(0.5, 1.1, 
+                                                            0.0,0.1), 
+                                            borderaxespad=0,
+                                            ncol=len(legend_list)//2, 
+                                            frameon=False,
+                                            prop={"size":13}
+                                            )     
+    fig.savefig(save_dir+f'FFT_{nprof}_{var}.jpg',**{"dpi":300,'transparent':True,"bbox_inches":'tight'})
+    fig.savefig(save_dir+f'FFT_{nprof}_{var}.pdf',**{"dpi":300,'transparent':True,"bbox_inches":'tight'})

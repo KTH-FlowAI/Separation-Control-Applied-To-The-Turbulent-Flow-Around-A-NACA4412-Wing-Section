@@ -53,7 +53,7 @@ def plt_setUp_Smaller():
 
 # Setup for output 
 figkw  ={
-        'bbox_inches':'tight',
+        # 'bbox_inches':'tight',
         "dpi":300,
         'transparent':True,
         }
@@ -88,7 +88,7 @@ title_setup ={
 single_fig_smaller = {
                 'ncols':1,
                 'nrows':1,
-                'figsize':(6,4)
+                'figsize':(7,7)
                   }
 
 single_fig_cfg = {
@@ -185,6 +185,15 @@ var_name_dict={
                         'xlabel':r'$y^+_n$',
                         'xscale':"log",
                         "xlim":[1.0,1200],
+                        'ylabel':r'$U_t/U_e$',
+                          },
+                  },
+              
+              'Uouter_y':{"name":r"$U_t/U_e$",
+                    'axs':{
+                        'xlabel':r'$y/\delta_{99}$',
+                        # 'xscale':"log",
+                        # "xlim":[1.0,1200],
                         'ylabel':r'$U_t/U_e$',
                           },
                   },
@@ -308,8 +317,10 @@ var_name_dict={
               'cp'     :{"name":r"$c_p$",
                           "axs":{
                             'xlabel':r'$x/c$',
-                            'ylabel':r'$c_p$',
-                            'ylim':[-4,1.1],
+                            # 'ylabel':r'$c_p$',
+                            'ylabel':r'$- c_p$',
+                            # 'ylim':[-4,1.1],
+                            'ylim':[-1.1,4],
                             
                           }
                           },
@@ -351,8 +362,11 @@ var_name_dict={
                     'axs':{
                       "xlabel":r"$fc/U_{\infty}$",
                       "xscale":'log',
-                      # "xlim":[5e-1,2e1],
-                      "xlim":[5e-1,1e1],
+                      "yscale":'log',
+                      # "xlim":[1.5,1.5e2],
+                      "xlim":[1.2,3e2],
+                      "ylim":[1e-4,5e4],
+                      # "xlim":[1e0,5e1],
                       "ylabel":'PSD'
                     }
                     },
@@ -396,6 +410,14 @@ def plot_Vel(d,fig,axs,x_c,var,
             **style,
             markevery=interval)
   
+  elif scale == 'outer_y':
+    Ue  = d['Ue'][0,idx]
+    lstar = d['lstar'][0,idx]
+    lstar = d['d99'][0,idx]
+    axs.plot(d['yn'][idx,:]/lstar,d[var][idx,:]/Ue,
+            **style,
+            markevery=interval)
+
   
     
   axs.grid(**grid_setup)
@@ -447,23 +469,29 @@ def plot_FFT(d,fig,axs,
   
   freq = np.squeeze(d['freq'])
   psd  = np.squeeze(d['psd'])
-  
+
   axs.plot(freq,psd,
-          linestyle=style['linestyle'],
+          # linestyle=style['linestyle'],
+          linestyle="-",
           lw=style['lw'],
           c=style['c'],
+
           )
   
+  psd  =  psd[np.where((freq>1.6)&(freq<80))]
+  freq = freq[np.where((freq>1.6)&(freq<80))]
+  
   axs.plot(freq[np.argmax(psd)],psd.max(),"*",
-          markersize=20,
-          c=style['c'])
+          markersize=25,
+          c=style['c'],
+          # fillstyle='none',
+          # linewidth=2,
+          )
   
   xmax = freq[np.argmax(psd)]
   ymax = psd.max()
-  text = r"$fc/U_{\infty}$ = "+"{:.1e}".format(xmax)
-  axs = annot_max(xmax,ymax,text,
-                  text_loc=text_loc,
-                  c=style['c'],ax=axs)
+  text = r"$fc/U_{\infty}$ = "+"{:.1f}".format(xmax)
+  axs = annot_max(xmax,ymax,text,text_loc=text_loc,c=style['c'],ax=axs)
 
   return fig,axs
 
@@ -471,11 +499,11 @@ def plot_FFT(d,fig,axs,
 def annot_max(xmax,ymax,text,c,text_loc, ax=None,):
     if not ax:
         ax=plt.gca()
-    bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec=c, lw=0.72)
+    bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec=c, lw=0.9)
     arrowprops=dict(arrowstyle="->",connectionstyle="angle,angleA=0,angleB=75",color=c)
     kw = dict(xycoords='data',textcoords="axes fraction",
               arrowprops=arrowprops,
-              bbox=bbox_props, ha="right", va="top",fontsize=15)
+              bbox=bbox_props, ha="right", va="top",fontsize=18)
     ax.annotate(text, xy=(xmax, ymax), 
                 xytext=text_loc,
                 color=c, 

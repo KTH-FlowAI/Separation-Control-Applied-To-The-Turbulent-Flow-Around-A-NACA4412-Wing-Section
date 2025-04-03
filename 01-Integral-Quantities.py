@@ -18,7 +18,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--x',default=0.75,type=float)
 parser.add_argument('--s',default="SS",type=str)
 args = parser.parse_args()
-plt_setUp()
+plt_setUp_Smaller()
 
 
 AOA = 11 
@@ -33,7 +33,7 @@ for caseName in data.keys():
     name = data[caseName]['fileName']
     fname= name_file(fldr,name,AOA,Rec,'SS')+'.mat'
     data[caseName]['data_SS'] = sio.loadmat(fname)
-    print(f"[IO] DATA: {fname}")
+    print(f"[IO] DATA: {fname}, {data[caseName]['data_SS'].keys()}")
     
     fname= name_file(fldr,name,AOA,Rec,'PS')+'.mat'
     data[caseName]['data_PS'] = sio.loadmat(fname)
@@ -52,9 +52,8 @@ control_region_cfg = {
 
 ### ZOOM IN THE T.E For CF on S.S
 var = 'cf'
-# fig,axs = plt.subplots(**single_fig_cfg)
-fig,axss = plt.subplots(1,2,figsize=(18,8))
-axs = axss[0]
+fig,axs = plt.subplots(**single_fig_cfg)
+# fig,axss = plt.subplots(1,2,figsize=(18,8));axs = axss[0]
 axins = inset_axes(axs, 
                   width="130%", 
                   height="60%",
@@ -85,26 +84,49 @@ for case_name in data.keys():
   fig,axins = plot_integral_quantities(data[case_name]['data_SS'],fig,axins,
                                       x_c_zoom,x_c_end,
                                       var,var_Name,style_dict,with_set=False)
-  legend_list.append(data[case_name]['label'])
+
+legend_list.append(Line2D([0],[0],
+                        color=cc.grays,
+                        linestyle="-",
+                        linewidth=3.0,
+                        label="S.S"))
+legend_list.append(Line2D([0],[0],
+                        color=cc.grays,
+                        linestyle="--",
+                        linewidth=3.0,
+                        label="P.S"))
+
+for case_name in data.keys():
+  legend_list.append(Rectangle(xy=(1, 0), width=3, height=3,
+                                color=data[case_name]['style']['c'],
+                                label=data[case_name]['label']))
 
 axs.yaxis.set_major_formatter(formatter2)
 axs.grid(**grid_setup)
-axs.set_title('(a)',**title_setup)
+# axs.set_title('(a)',**title_setup)
 axs.axvspan(**control_region_cfg)
 axins.axvspan(**control_region_cfg2)
 axins.set_ylim([-0.001,0.001])
 axins.set_xticks([0.8,0.9,1.0])
-
+axs.legend(handles=legend_list,
+           loc='upper center', 
+                        bbox_to_anchor=(0.5, 1.0, 
+                                        0.1,0.1), 
+                        borderaxespad=0,
+                        ncol=len(legend_list)//2, 
+                        frameon=False,
+                        prop={"size":13}
+                        )
 axins.yaxis.set_major_formatter(formatter2)
 axs.axhline(0,**support_line1)
 axins.axhline(0,**support_line1)
+
 
 #----------------------
 # Pressure Side 
 #----------------------
 # fig,axs = plt.subplots(**single_fig_cfg)
-
-axs = axss[0]
+# axs = axss[0]
 var_Name = var_name_dict[var]['name']
 legend_list=[]
 for case_name in data.keys():
@@ -123,6 +145,14 @@ axs.grid(**grid_setup)
 # axs.axvspan(**control_region_cfg)
 axs.yaxis.set_major_formatter(formatter2)
 
+fig.savefig(f'Figs/02-BL-DEVELP/cf_BothSides.jpg',
+              **figkw
+              )
+fig.savefig(f'Figs/02-BL-DEVELP/cf_BothSides.pdf',
+              **figkw
+              )
+
+
 
 #------------------------------------------
 # Integral quantities : cp on both sides in one figure 
@@ -131,12 +161,12 @@ axs.yaxis.set_major_formatter(formatter2)
 ### ZOOM IN THE T.E For CF on S.S
 var = 'cp'
 # fig,axs = plt.subplots(**single_fig_larger)
-# fig,axs = plt.subplots(**single_fig_cfg)
-axs = axss[1]
+fig,axs = plt.subplots(**single_fig_cfg)
+# axs = axss[1]
 axins = inset_axes(axs,
                           width="200%", 
                           height="75%",
-                          bbox_to_anchor=(  0.75,  0.15,   0.3,   0.4),
+                          bbox_to_anchor=(  0.75,  0.55,   0.3,   0.4),
                           bbox_transform=axs.transAxes,
                           )
 x_start = 0.0,
@@ -156,6 +186,8 @@ for case_name in data.keys():
 
   ## Enclose the Cp 
   data[case_name]['data_PS']['cp'][0,1] = data[case_name]['data_SS']['cp'][0,0]
+  data[case_name]['data_PS']['cp'][0,:] *= -1 
+  data[case_name]['data_SS']['cp'][0,:] *= -1 
   # data[case_name]['data_PS']['cp'][0,-1] = data[case_name]['data_SS']['cp'][0,-1]
 
   fig,axs = plot_integral_quantities(data[case_name]['data_SS'],fig,axs,
@@ -187,12 +219,21 @@ axs.axvspan(**control_region_cfg)
 axins.axvspan(**control_region_cfg2)
 axs.axhline(0,**support_line1)
 axins.axhline(0,**support_line1)
-axs.set_title('(b)',**title_setup)
+# axs.set_title('(b)',**title_setup)
+axs.legend(handles=legend_list,
+           loc='upper center', 
+                        bbox_to_anchor=(0.5, 1.0, 
+                                        0.0,0.1), 
+                        borderaxespad=0,
+                        ncol=len(legend_list)//2, 
+                        frameon=False,
+                        prop={"size":13}
+                        )
 fig.subplots_adjust(wspace=0.2)
-fig.savefig(f'Figs/02-BL-DEVELP/cf_cp_BothSides.jpg',
+fig.savefig(f'Figs/02-BL-DEVELP/cp_BothSides.jpg',
               **figkw
               )
-fig.savefig(f'Figs/02-BL-DEVELP/cf_cp_BothSides.pdf',
+fig.savefig(f'Figs/02-BL-DEVELP/cp_BothSides.pdf',
               **figkw
               )
 
@@ -200,9 +241,9 @@ fig.savefig(f'Figs/02-BL-DEVELP/cf_cp_BothSides.pdf',
 #------------------------------------------
 # Integral quantities : Others on both sides
 #------------------------------------------
-plt.rc("xtick",labelsize = 30)
-plt.rc("ytick",labelsize = 30)
-plt.rc("font",size = 35)
+# plt.rc("xtick",labelsize = 12)
+plt.rc("ytick",labelsize = 14)
+# plt.rc("font",size = 20)
 
 
 
@@ -213,13 +254,14 @@ VarList =[
           "H12",
           ]
 
-fig, axss = plt.subplots(**quadra_fig_22)
-axss = axss.flatten()
-AlphaList = [['(a)',"(b)","(c)","(d)"],["(e)","(f)","(g)","(h)"]]
-for jl, side in enumerate(sides): 
+# fig, axss = plt.subplots(**quadra_fig_22)
+# axss = axss.flatten()
+# AlphaList = [['(a)',"(b)","(c)","(d)"],["(e)","(f)","(g)","(h)"]]
+for il, var in enumerate(VarList):
+  fig,axs = plt.subplots(**single_fig_smaller)
+  for jl, side in enumerate(sides): 
   # fig,axss = plt.subplots(**quadra_fig_larger)
-  for il, var in enumerate(VarList):
-    axs=axss[il]
+    # axs=axss[il]
     # fig,axs = plt.subplots(**single_fig_cfg)
     x_c = 0.16
     var_Name = var_name_dict[var]
@@ -267,19 +309,41 @@ for jl, side in enumerate(sides):
                                         )
       
 
-      legend_list.append(data[case_name]['label'])
-    axs.set(**var_name_dict[var]['axs'])
-    axs.grid(**grid_setup)
-    axs.axvspan(**control_region_cfg)
-    axs.set_title(AlphaList[0][il],**title_setup)
-    # axs.yaxis.set_major_formatter(formatter3)
-fig.subplots_adjust(**{"hspace":0.4,"wspace":0.25})
-fig.savefig(f'Figs/02-BL-DEVELP/BL_{il+1}VARS.jpg',
-                **figkw
-                )
-fig.savefig(f'Figs/02-BL-DEVELP/BL_{il+1}VARS.pdf',
-                **figkw
-                )
+
+  axs.set(**var_name_dict[var]['axs'])
+  axs.grid(**grid_setup)
+  axs.axvspan(**control_region_cfg)
+    
+  legend_list.append(Line2D([0],[0],
+                            color=cc.grays,
+                            linestyle="-",
+                            linewidth=3.0,
+                            label="S.S"))
+  legend_list.append(Line2D([0],[0],
+                            color=cc.grays,
+                            linestyle="--",
+                            linewidth=3.0,
+                            label="P.S"))
+
+  for case_name in data.keys():
+    legend_list.append(Rectangle(xy=(1, 0), width=3, height=3,
+                                    color=data[case_name]['style']['c'],
+                                    label=data[case_name]['label']))
+  axs.legend(handles=legend_list,
+           loc='upper center', 
+                        bbox_to_anchor=(0.5, 1.0, 
+                                        0.0,0.1), 
+                        borderaxespad=0,
+                        ncol=len(legend_list)//2, 
+                        frameon=False,
+                        prop={"size":12}
+                        )
+  fig.savefig(f'Figs/02-BL-DEVELP/BL_{var}.jpg',
+                  **figkw
+                  )
+  fig.savefig(f'Figs/02-BL-DEVELP/BL_{var}.pdf',
+                    **figkw
+                    )
 
 
 

@@ -47,16 +47,18 @@ for caseName in data.keys():
 """
 Mean Velocity profiles at different streamwise location Inner and outer scale 
 """
+
 def Visual_Mean_Vel():
+    figs_cfg = {'nrows':1,'ncols':1,'figsize':(8.,8.)}
     VarList =['U','V']
     AlphaList = [["(a)","(b)"],["(c)","(d)"],]
     scales=['inner','outer']
     for var in VarList:
-        fig,axss = plt.subplots(**quadra_fig_22_large2)
-        # axss = axss.flatten()
+        
         for jl, scale in enumerate(scales):
             for il, side in enumerate(sides): 
-                axs = axss[il,jl]
+                # axs = axss[il,jl]
+                fig,axs = plt.subplots(**figs_cfg)
                 x_c = args.x
                 var_Name = var_name_dict[var+scale]
                 legend_list=[]
@@ -68,20 +70,35 @@ def Visual_Mean_Vel():
                                     data[case_name]['style'],
                                     grid_setup,
                                     scale=scale)
-                    legend_list.append(data[case_name]['label'])
-                
+                    # legend_list.append(data[case_name]['label'])
+                    legend_list.append(Line2D([0],[0],
+                            **data[case_name]['style'],
+                            label=data[case_name]['label']))
+                    
                 axs.set(**var_name_dict[var+scale]['axs'])
-                axs.set_title(AlphaList[il][jl] + " " + rf"$x/c={x_c}$"+", "+f"{side_text[side]}",**title_setup)
+                # axs.set_title(AlphaList[il][jl] + " " + rf"$x/c={x_c}$"+", "+f"{side_text[side]}",**title_setup)
                 axs.xaxis.set_minor_locator(locmin)
                 axs.xaxis.set_major_locator(locmin)
                 axs.xaxis.set_minor_formatter(NullFormatter())
                 axs.yaxis.set_major_formatter(formatter2)
-        fig.subplots_adjust(**{"hspace":0.4,"wspace":0.25})
-        fig.savefig(f'Figs/03-STATS/{var}_{int(x_c*100)}.pdf',
-                        **figkw
-                        )
-        # plt.clf()
-        # plt.close(fig)
+                axs.legend(handles=legend_list,
+                            loc='upper center', 
+                                            bbox_to_anchor=(0.5, 1.0, 
+                                                            0.0,0.1), 
+                                            borderaxespad=0,
+                                            ncol=len(legend_list)//2, 
+                                            frameon=False,
+                                            prop={"size":14}
+                                            )
+                fig.savefig(f'Figs/03-STATS/{var}_{scale}_{side}_{int(x_c*100)}.jpg',
+                                **figkw
+                                )
+                fig.savefig(f'Figs/03-STATS/{var}_{scale}_{side}_{int(x_c*100)}.pdf',
+                                **figkw
+                                )
+                
+                plt.clf()
+                plt.close(fig)
 
 
 """
@@ -95,9 +112,9 @@ def Visual_Reynolds_Stress():
     AlphaList = [["(a)","(b)"],["(c)","(d)"],]
     
     for var in VarList:
-        fig,axss = plt.subplots(**quadra_fig_22_large2)
         for jl, scale in enumerate(scales):
             for il, side in enumerate(sides): 
+                fig,axss = plt.subplots(**quadra_fig_22_large2)
                 axs = axss[il,jl]
                 x_c = args.x
                 var_Name = var_name_dict[var+scale]
@@ -118,12 +135,12 @@ def Visual_Reynolds_Stress():
                 axs.xaxis.set_major_locator(locmin)
                 axs.xaxis.set_minor_formatter(NullFormatter())
                 axs.yaxis.set_major_formatter(formatter2)
-        fig.subplots_adjust(**{"hspace":0.4,"wspace":0.3})
-        fig.savefig(f'Figs/03-STATS/{var}_{int(x_c*100)}.pdf',
-                        **figkw
-                        )
-        plt.clf()
-        plt.close(fig)
+                fig.subplots_adjust(**{"hspace":0.4,"wspace":0.3})
+                fig.savefig(f'Figs/03-STATS/{var}_{int(x_c*100)}.pdf',
+                                **figkw
+                                )
+                plt.clf()
+                plt.close(fig)
 
 
 def Visual_Reynolds_Stress_All():
@@ -141,11 +158,56 @@ def Visual_Reynolds_Stress_All():
     colors = colors(np.linspace(0,1,1+len(VarList)))[:-1]
     
     legend_list=[]
-    fig,axss = plt.subplots(**quadra_fig_22_large2)
+    # figs_cfg = {'nrows':2,'ncols':2,'figsize':(16,14)}
+    figs_cfg = {'nrows':1,'ncols':1,'figsize':(8.5,8.5)}
+    # fig,axss = plt.subplots(**figs_cfg)
+
+
+    ## Inspection of axess 
+
+
+
     for jl, scale in enumerate(scales):
         for il, side in enumerate(sides): 
-            axs = axss[il,jl]
+            legend_list = []
+            fig,axs = plt.subplots(**figs_cfg)
+            
+            # axs = axss[il,jl]
             x_c = args.x
+            
+            if side =='PS':
+                ## Inspection 
+                axins = inset_axes(axs,
+                            width="100%", 
+                            height="100%",
+                            bbox_to_anchor=(  0.70,  0.55,   0.3,   0.4),
+                            bbox_transform=axs.transAxes,
+                            )
+                for case_name in data.keys():
+                    stylelist = data[case_name]['style']
+                    for kl, var in enumerate(VarList):
+                        stylelist['c'] = colors[kl]
+
+                        var_Name = var_name_dict[var+scale]
+                        fig,axins = plot_ReynoldStress(data[case_name][f'data_{side}'],
+                                        fig,axins,x_c,var,var_Name,
+                                        stylelist,
+                                        grid_setup,
+                                        scale=scale,
+                                        interval=80,)
+                
+                if scale=='inner':
+                    axins.set(**{'xlim':[10,100],'xscale':'log','ylim':[-20,50]})
+                    # axins.set_xticks([10,50,100])
+                elif scale=='outer':
+                    axins.set(**{'xlim':[10,100],'xscale':'log','ylim':[-0.005,0.01]})
+                
+                axins.xaxis.set_minor_locator(locmin)
+                # axins.xaxis.set_major_locator(locmin)
+                axins.xaxis.set_minor_formatter(NullFormatter())
+                axins.yaxis.set_major_formatter(formatter2)
+        
+
             for case_name in data.keys():
                 stylelist = data[case_name]['style']
                 for kl, var in enumerate(VarList):
@@ -160,61 +222,102 @@ def Visual_Reynolds_Stress_All():
                                     interval=80,)
                     
             axs.set(**var_name_dict['uiuj'+scale]['axs'])
-            axs.set_title(AlphaList[jl][il] + " " + rf"$x/c={x_c}$"+", "+f"{side_text[side]}",**title_setup)
+            # axs.set_title(AlphaList[jl][il] + " " + rf"$x/c={x_c}$"+", "+f"{side_text[side]}",**title_setup)
             axs.xaxis.set_minor_locator(locmin)
             axs.xaxis.set_major_locator(locmin)
             axs.xaxis.set_minor_formatter(NullFormatter())
             axs.yaxis.set_major_formatter(formatter2)
     
-    for kl,var in enumerate(VarList):
-        legend_list.append( Rectangle(xy=(1, 0), width=3, height=3,
-                            color=colors[kl],
-                            label=NameList[kl]))
-    for case_name in data.keys():
-        st = data[case_name]['style']
-        label = data[case_name]['label']
+            for kl,var in enumerate(VarList):
+                legend_list.append( Rectangle(xy=(1, 0), width=3, height=3,
+                                    color=colors[kl],
+                                    label=NameList[kl]))
+            for case_name in data.keys():
+                st = data[case_name]['style']
+                label = data[case_name]['label']
 
-        legend_list.append(Line2D([0],[0],
-                            color=cc.grays,
-                            lw  = 1.5, 
-                            ls  = st['linestyle'],
-                            marker = st['marker'] if case_name !='Ref' else None,
-                            markersize=6,
-                            fillstyle=st['fillstyle'],
+                legend_list.append(Line2D([0],[0],
+                                    color=cc.grays,
+                                    lw  = 1.5, 
+                                    ls  = st['linestyle'],
+                                    marker = st['marker'] if case_name !='Ref' else None,
+                                    markersize=6,
+                                    fillstyle=st['fillstyle'],
 
-                            label=label,
+                                    label=label,
+                                    )
+                                    )
+
+            axs.legend(handles=legend_list,
+                                loc='upper center', 
+                                            bbox_to_anchor=(0.5, 1.0, 
+                                                            0.1,0.1), 
+                                            borderaxespad=0,
+                                            ncol=len(legend_list)//2, 
+                                            frameon=False,
+                                            prop={"size":14}
+                                            )
+            fig.savefig(f'Figs/03-STATS/StressAll_{scale}_{side}_{int(x_c*100)}.pdf',
+                            **figkw
                             )
+            fig.savefig(f'Figs/03-STATS/StressAll_{scale}_{side}_{int(x_c*100)}.jpg',
+                            **figkw
                             )
-
-    axss[0,-1].legend(handles=legend_list,ncol=1,
-                        loc='upper left', 
-                        bbox_to_anchor=(1, 0.9, 
-                                        0.1,0.1), 
-                        borderaxespad=0, 
-                        frameon=False,)
-
-    axss[-1,-1].legend(handles=legend_list,ncol=1,
-                        loc='upper left', 
-                        bbox_to_anchor=(1, 0.9, 
-                                        0.1,0.1), 
-                        borderaxespad=0, 
-                        frameon=False,)
-
-    fig.subplots_adjust(**{"hspace":0.4,"wspace":0.3})
-
-    fig.savefig(f'Figs/03-STATS/StressAll_{int(x_c*100)}.pdf',
-                    **figkw
-                    )
-    plt.clf()
-    plt.close(fig)
+            plt.clf()
+            plt.close(fig)
 
 
+
+def Visual_Mean_Vel_youter():
+    figs_cfg = {'nrows':1,'ncols':1,'figsize':(8.,8.)}
+    VarList =['U']
+    AlphaList = [["(a)","(b)"],["(c)","(d)"],]
+    scales=['outer_y']
+    for var in VarList:
+        
+        for jl, scale in enumerate(scales):
+            for il, side in enumerate(sides): 
+                # axs = axss[il,jl]
+                fig,axs = plt.subplots(**figs_cfg)
+                x_c = args.x
+                var_Name = var_name_dict[var+scale]
+                legend_list=[]
+                for case_name in data.keys():
+                    fig,axs = plot_Vel(data[case_name][f'data_{side}'],
+                                    fig,axs,x_c,var,var_Name,
+                                    data[case_name]['style'],
+                                    grid_setup,
+                                    scale=scale)
+                    # legend_list.append(data[case_name]['label'])
+                    legend_list.append(Line2D([0],[0],
+                            **data[case_name]['style'],
+                            label=data[case_name]['label']))
+                axs.set(**var_name_dict[var+scale]['axs'])
+                axs.legend(handles=legend_list,
+                            loc='upper center', 
+                                            bbox_to_anchor=(0.5, 1.0, 
+                                                            0.0,0.1), 
+                                            borderaxespad=0,
+                                            ncol=len(legend_list)//2, 
+                                            frameon=False,
+                                            prop={"size":14}
+                                            )
+                fig.savefig(f'Figs/05-Suply/{var}_{scale}_{side}_{int(x_c*100)}.jpg',
+                                **figkw
+                                )
+                fig.savefig(f'Figs/05-Suply/{var}_{scale}_{side}_{int(x_c*100)}.pdf',
+                                **figkw
+                                )
+                
+                plt.clf()
+                plt.close(fig)
 
 
 
 if __name__ == "__main__":
-    Visual_Mean_Vel()
+    # Visual_Mean_Vel()
+    Visual_Mean_Vel_youter()
 
-    Visual_Reynolds_Stress()
+    # Visual_Reynolds_Stress()
     
-    Visual_Reynolds_Stress_All()
+    # Visual_Reynolds_Stress_All()

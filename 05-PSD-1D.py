@@ -19,7 +19,15 @@ parser.add_argument('--prof',default=4,type=int)
 parser.add_argument('--var',default="U",type=str)
 parser.add_argument('--scale',default="inner",type=str)
 args = parser.parse_args()
-plt_setUp_Smaller()
+
+plt.rc("font",family = "serif")
+plt.rc("text",usetex = "true")
+plt.rc("font",size = 18)
+plt.rc("axes",labelsize = 18, linewidth = 2)
+plt.rc("legend",fontsize= 15, handletextpad = 0.1)
+plt.rc("xtick",labelsize = 15)
+plt.rc("ytick",labelsize = 15)
+    
 
 AOA = 11 
 Rec = 200
@@ -31,7 +39,6 @@ AlphaList = [['(a)',"(b)","(c)","(d)"],["(e)","(f)","(g)","(h)"]]
 def name_file(fldr,name,nprof,var):
     data_to_load= fldr + f"SP1D_{name}_{nprof}.mat"
     return data_to_load
-
 
 
 def post_process_Spectra(out):
@@ -83,15 +90,54 @@ for caseName in data.keys():
     data[caseName][f'data'] = post_process_Spectra(d)
     print(f"[IO] DATA: {fname}")
 
+data_ = data['control3']['data']
+data['control3']['data']=data['control4']['data']
+data['control4']['data']=data_
+
 
 
 levels = np.array([0.2,0.8])
 fig,axs = plt.subplots(1,1)
+
+legend_list = []
 for kl, case_name in enumerate(reversed(data.keys())):
     d = data[case_name]['data']
     style_dict = data[case_name]['style']
+    style_dict['marker']= "None"
+    style_dict['ls']= "-"
     text_loc=(0.9-kl*0.1,0.9-kl*0.1)
     fig,axs = plot_1DPSD(d,fig,axs,style_dict,levels,text_loc,scale)
+
+    legend_list.append(Rectangle(xy=(1, 0), width=3, height=3,
+                            color=style_dict['c'],
+                            label=data[case_name]['label']))
+
+axs.xaxis.set_minor_locator(locmin)
+axs.xaxis.set_major_locator(locmin)        
+axs.yaxis.set_minor_locator(locmin)
+axs.yaxis.set_major_locator(locmin)
+axs.grid(**grid_setup)
+
+#### Add Legend here
+
+legend_list.append(Line2D([0],[0],
+                    color=cc.grays,
+                    lw  = 1.5, 
+                    ls  = "None",
+                    marker = "*",
+                    markersize=12,
+                    label='Maxima',)
+                )
+
+legend_list.append(Line2D([0],[0],
+                    color=cc.grays,
+                    lw  = 2, 
+                    ls  = "-",
+                    marker = "None",
+                    # markersize=12,
+                    label='Spectra',)
+                )
+legend_list.reverse()
 
 if scale == "inner":
     axs.set(**{
@@ -112,11 +158,17 @@ elif scale == "outer":
         'ylim':[1e-3,1e0],
                 })
 
-axs.xaxis.set_minor_locator(locmin)
-axs.xaxis.set_major_locator(locmin)        
-axs.yaxis.set_minor_locator(locmin)
-axs.yaxis.set_major_locator(locmin)
-axs.grid(**grid_setup)
+axs.legend(handles=legend_list,
+                            loc='upper center', 
+                                            bbox_to_anchor=(0.5, 1.05, 
+                                                            0.0,0.1), 
+                                            borderaxespad=0,
+                                            ncol=len(legend_list)//2, 
+                                            frameon=False,
+                                            prop={"size":12}
+                                            )
+
+
 
 fig.savefig(f'Figs/04-FFT/Prof_SP1D_Prof{args.prof}.jpg',**{'dpi':300,'transparent':True,'bbox_inches':'tight'})
 fig.savefig(f'Figs/04-FFT/Prof_SP1D_Prof{args.prof}.pdf',**{'dpi':300,'transparent':True,'bbox_inches':'tight'})

@@ -141,8 +141,8 @@ df  =pd.read_csv('CLCD.csv')
 ######################
 # Fig 1 Bar for Cd
 ########################
-fig, axss = plt.subplots(1,2,figsize = (14,6))
-axs = axss[0]
+fig, axs = plt.subplots(1,1,figsize = (9,6))
+# axs = axss[0]
 caselist = [c[4:] if "Case" in c else c for c in df['Name']  ]
 print(caselist)
 bottom = np.zeros(shape=(len(caselist)))
@@ -155,7 +155,10 @@ axs.set_ylabel(r'$C_d = C_{d,f} + C_{d,p}$',fontsize = 20)
 axs.set_xlabel(r'CASE',fontsize = 20)
 # axs.legend(bbox_to_anchor=(1.0,0.5,0.0,0.5))
 # axs.legend(loc='upper left',ncol=2)
-axs.set_title("(a)",**title_setup)
+# axs.set_title("(a)",**title_setup)
+
+fig.savefig('Figs/01-CTRL-EFFECT/cd_BAR.jpg',**figkw)
+fig.savefig('Figs/01-CTRL-EFFECT/cd_BAR.pdf',**figkw)
 
 
 ################
@@ -163,8 +166,8 @@ axs.set_title("(a)",**title_setup)
 ################
 
 legend_list = []
-# fig, axs = plt.subplots(1,1,figsize=(6,6))
-axs = axss[1]
+fig, axs = plt.subplots(1,1,figsize=(9,6))
+# axs = axss[1]
 for il, case in enumerate(data.keys()):
     
     style_dict = data[case]['style']
@@ -200,9 +203,9 @@ axs.legend(
   # bbox_to_anchor=(1.,0.5,0.0,0.5),
   prop={'size':15}
   )
-axs.set_title("(b)",**title_setup)
+# axs.set_title("(b)",**title_setup)
 # axs.grid(which='major')
-fig.tight_layout()
+# fig.tight_layout()
 fig.savefig('Figs/01-CTRL-EFFECT/cl_VS_cd.jpg',**figkw)
 fig.savefig('Figs/01-CTRL-EFFECT/cl_VS_cd.pdf',**figkw)
 
