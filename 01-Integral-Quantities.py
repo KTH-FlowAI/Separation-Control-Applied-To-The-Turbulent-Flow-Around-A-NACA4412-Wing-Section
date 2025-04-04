@@ -254,9 +254,6 @@ VarList =[
           "H12",
           ]
 
-# fig, axss = plt.subplots(**quadra_fig_22)
-# axss = axss.flatten()
-# AlphaList = [['(a)',"(b)","(c)","(d)"],["(e)","(f)","(g)","(h)"]]
 for il, var in enumerate(VarList):
   fig,axs = plt.subplots(**single_fig_smaller)
   for jl, side in enumerate(sides): 
@@ -357,7 +354,12 @@ VarList = [
           "beta",
           "Retheta",
           "Retau",
-          "H12"]
+          "H12",
+        ## Added after revision
+          "utau",
+          "Ue",
+          "d99"
+          ]
 
 xLoc  = 0.75 
 for jl, side in enumerate(sides): 
@@ -369,6 +371,9 @@ for jl, side in enumerate(sides):
         'Retheta':[],
         "Retau":[],
         "H12":[],
+        "utau":[],
+        "Ue":[],
+        "d99":[],
             }
   for kl, case_name in enumerate(data.keys()):
     sum_table['case'].append(data[case_name][f'label'])
