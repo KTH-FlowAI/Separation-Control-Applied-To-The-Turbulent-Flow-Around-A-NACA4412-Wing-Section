@@ -191,10 +191,19 @@ var_name_dict={
               
               'Uouter_y':{"name":r"$U_t/U_e$",
                     'axs':{
-                        'xlabel':r'$y/\delta_{99}$',
+                        'xlabel':r'$y_n/\delta_{99}$',
                         # 'xscale':"log",
                         # "xlim":[1.0,1200],
                         'ylabel':r'$U_t/U_e$',
+                          },
+                  },
+              
+              'Uouter_norotate':{"name":r"$U$",
+                    'axs':{
+                        'xlabel':r'$y$',
+                        # 'xscale':"log",
+                        # "xlim":[1.0,1200],
+                        'ylabel':r'$U$',
                           },
                   },
 
@@ -417,6 +426,15 @@ def plot_Vel(d,fig,axs,x_c,var,
     axs.plot(d['yn'][idx,:]/lstar,d[var][idx,:]/Ue,
             **style,
             markevery=interval)
+  
+  elif scale == 'outer_norotate':
+    Ue  = d['Ue'][0,idx]
+    lstar = d['lstar'][0,idx]
+    lstar = d['d99'][0,idx]
+    axs.plot(d['yn'][idx,:],d[var][idx,:],
+            **style,
+            markevery=interval)
+  
 
   
     

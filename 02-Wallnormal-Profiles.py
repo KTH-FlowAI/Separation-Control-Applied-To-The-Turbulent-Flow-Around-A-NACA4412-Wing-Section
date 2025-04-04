@@ -312,11 +312,111 @@ def Visual_Mean_Vel_youter():
                 plt.clf()
                 plt.close(fig)
 
+def Visual_Mean_Vel_youter_NOROTAT():
+    """
+    Visualisation of velocity profiles (especially the L.E) without rotation.
+    Adding a interpolation of angle 
+    """
+    N=9
+    from copy import deepcopy
+    from lib.wingInterpMesh import NACA_mesh 
+    t = 12/100
+    c = 1
+    m = 4/100
+    p = 4/10
+    offset = -0.5
+    aoa = 11 # deg
+    aoa_= aoa*np.pi/180 
+    # wall-normal profiles 
+    npts = 100  # Number of points for each wall-normal profile 
+    d_out= 1e-1 # outer-scaled unit length
+    d_in = 5e-5 # inner-
+    xc_vec = np.linspace(0.0,1.0,10)**2.5 * 0.02
+    wallMesh =  NACA_mesh(xc_vec,t,m,p,c=c,aoa=aoa_,offset=offset)
+    ## Use the prescribed inner- and outer-scaled length to generate wall-normal profiles 
+    wallMesh.define_yn_prof(npts=npts,d_out=d_out,d_in=d_in)
+    ## Create the mesh 
+    wallMesh.create_BL_mesh()
+    
+    ### Extract the profiles
+    interp_dict ={}
+    interp_dict["x_PS"]=wallMesh.xl[0]
+    interp_dict["x_SS"]=wallMesh.xu[0]
+    interp_dict["th_PS"]=wallMesh.alphal_0
+    interp_dict["th_SS"]=wallMesh.alphau_0
+    
+    ### Do interpolation
+    interp_dict['coeff_SS'] = np.polyfit(interp_dict['x_SS'],interp_dict['th_SS'],N)
+    interp_dict['func_SS'] = np.poly1d(interp_dict['coeff_SS'])
+    interp_dict['coeff_PS'] = np.polyfit(interp_dict['x_PS'],interp_dict['th_PS'],N)
+    interp_dict['func_PS'] = np.poly1d(interp_dict['coeff_PS'])
+
+
+
+    figs_cfg = {'nrows':1,'ncols':1,'figsize':(8.,8.)}
+    VarList =['U']
+    AlphaList = [["(a)","(b)"],["(c)","(d)"],]
+    scales=['outer_norotate']
+
+    for var in VarList:
+        for jl, scale in enumerate(scales):
+            for il, side in enumerate(["SS"]): 
+                # axs = axss[il,jl]
+                fig,axs = plt.subplots(**figs_cfg)
+                x_c = args.x
+                var_Name = var_name_dict[var+scale]
+                legend_list=[]
+
+                
+                for case_name in data.keys():
+                    xc = data[case_name][f'data_{side}']['xc'].squeeze()
+                    idx = np.where(xc>=x_c)[0][0]
+
+                    Ut = data[case_name][f'data_{side}']["U"][idx,:]
+                    Vn = data[case_name][f'data_{side}']["V"][idx,:]
+                    theta = interp_dict[f'func_{side}'](x_c)
+                    print(f'Angle={theta} at x/c={x_c}')
+
+                    data[case_name][f'data_{side}']['Uouter_norotate'] = deepcopy(data[case_name][f'data_{side}']["U"])
+
+                    data[case_name][f'data_{side}']['Uouter_norotate'][idx,:] = Ut * np.sin(theta) + \
+                                                                        Vn * np.cos(theta)
+                    print(data[case_name][f'data_{side}']['Uouter_norotate'][idx,:])
+                    fig,axs = plot_Vel(data[case_name][f'data_{side}'],
+                                    fig,axs,x_c,var,var_Name,
+                                    data[case_name]['style'],
+                                    grid_setup,
+                                    scale=scale)
+                    # legend_list.append(data[case_name]['label'])
+                    legend_list.append(Line2D([0],[0],
+                            **data[case_name]['style'],
+                            label=data[case_name]['label']))
+                axs.set(**var_name_dict[var+scale]['axs'])
+                axs.legend(handles=legend_list,
+                            loc='upper center', 
+                                            bbox_to_anchor=(0.5, 1.0, 
+                                                            0.0,0.1), 
+                                            borderaxespad=0,
+                                            ncol=len(legend_list)//2, 
+                                            frameon=False,
+                                            prop={"size":14}
+                                            )
+                fig.savefig(f'Figs/05-Suply/{var}_{scale}_{side}_{int(x_c*100)}.jpg',
+                                **figkw
+                                )
+                fig.savefig(f'Figs/05-Suply/{var}_{scale}_{side}_{int(x_c*100)}.pdf',
+                                **figkw
+                                )
+                
+                plt.clf()
+                plt.close(fig)
+
 
 
 if __name__ == "__main__":
     # Visual_Mean_Vel()
-    Visual_Mean_Vel_youter()
+    # Visual_Mean_Vel_youter()
+    Visual_Mean_Vel_youter_NOROTAT()
 
     # Visual_Reynolds_Stress()
     
