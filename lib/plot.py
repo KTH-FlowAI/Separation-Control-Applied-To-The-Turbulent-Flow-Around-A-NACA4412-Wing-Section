@@ -49,6 +49,17 @@ def plt_setUp_Smaller():
     plt.rc("ytick",labelsize = 18)
     return 
 
+def plt_setUp_Smaller2():
+    import matplotlib.pyplot as plt
+    plt.rc("font",family = "serif")
+    plt.rc("text",usetex = "true")
+    plt.rc("font",size = 20)
+    plt.rc("axes",labelsize   = 25, linewidth = 2)
+    # plt.rc("legend",fontsize  = 14, handletextpad = 0.1)
+    plt.rc("xtick",labelsize  = 20)
+    plt.rc("ytick",labelsize  = 20)
+    return 
+
 
 
 # Setup for output 

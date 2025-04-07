@@ -241,12 +241,12 @@ fig.savefig(f'Figs/02-BL-DEVELP/cp_BothSides.pdf',
 #------------------------------------------
 # Integral quantities : Others on both sides
 #------------------------------------------
-# plt.rc("xtick",labelsize = 12)
-plt.rc("ytick",labelsize = 14)
-# plt.rc("font",size = 20)
-
-
-
+plt_setUp_Smaller2()
+single_fig_smaller = {
+                'ncols':1,
+                'nrows':1,
+                'figsize':(8.5,6)
+                  }
 VarList =[
           'beta',
           'Retheta',
@@ -275,7 +275,7 @@ for il, var in enumerate(VarList):
       
       label = data[case_name]['label']
       style_dict = data[case_name]['style']
-      style_dict['lw']  = 3.5
+      style_dict['lw']  = 2.5
       style_dict['marker']  = None
       if side == 'SS':
         style_dict['linestyle']='-'
@@ -331,17 +331,17 @@ for il, var in enumerate(VarList):
   axs.legend(handles=legend_list,
            loc='upper center', 
                         bbox_to_anchor=(0.5, 1.0, 
-                                        0.0,0.1), 
+                                        0.0,0.11), 
                         borderaxespad=0,
                         ncol=len(legend_list)//2, 
                         frameon=False,
-                        prop={"size":12}
+                        prop={"size":14}
                         )
   fig.savefig(f'Figs/02-BL-DEVELP/BL_{var}.jpg',
-                  **figkw
+                  **{'dpi':300,}
                   )
   fig.savefig(f'Figs/02-BL-DEVELP/BL_{var}.pdf',
-                    **figkw
+                    **{'dpi':300,}
                     )
 
 

@@ -49,7 +49,10 @@ Mean Velocity profiles at different streamwise location Inner and outer scale
 """
 
 def Visual_Mean_Vel():
-    figs_cfg = {'nrows':1,'ncols':1,'figsize':(8.,8.)}
+    plt.rc("xtick",labelsize  = 16)
+    plt.rc("ytick",labelsize  = 16)
+    
+    figs_cfg = {'nrows':1,'ncols':1,'figsize':(7.5,7.5)}
     VarList =['U','V']
     AlphaList = [["(a)","(b)"],["(c)","(d)"],]
     scales=['inner','outer']
@@ -84,17 +87,17 @@ def Visual_Mean_Vel():
                 axs.legend(handles=legend_list,
                             loc='upper center', 
                                             bbox_to_anchor=(0.5, 1.0, 
-                                                            0.0,0.1), 
+                                                            0.0,0.11), 
                                             borderaxespad=0,
                                             ncol=len(legend_list)//2, 
                                             frameon=False,
                                             prop={"size":14}
                                             )
                 fig.savefig(f'Figs/03-STATS/{var}_{scale}_{side}_{int(x_c*100)}.jpg',
-                                **figkw
+                                **{'dpi':300,}
                                 )
                 fig.savefig(f'Figs/03-STATS/{var}_{scale}_{side}_{int(x_c*100)}.pdf',
-                                **figkw
+                                **{'dpi':300,}
                                 )
                 
                 plt.clf()
@@ -159,7 +162,7 @@ def Visual_Reynolds_Stress_All():
     
     legend_list=[]
     # figs_cfg = {'nrows':2,'ncols':2,'figsize':(16,14)}
-    figs_cfg = {'nrows':1,'ncols':1,'figsize':(8.5,8.5)}
+    figs_cfg = {'nrows':1,'ncols':1,'figsize':(8,8)}
     # fig,axss = plt.subplots(**figs_cfg)
 
 
@@ -251,11 +254,13 @@ def Visual_Reynolds_Stress_All():
             axs.legend(handles=legend_list,
                                 loc='upper center', 
                                             bbox_to_anchor=(0.5, 1.0, 
-                                                            0.1,0.1), 
+                                                            0.15,0.14), 
                                             borderaxespad=0,
+                                            columnspacing=0.5,
                                             ncol=len(legend_list)//2, 
+                                            # ncol=1, 
                                             frameon=False,
-                                            prop={"size":14}
+                                            prop={"size":16}
                                             )
             fig.savefig(f'Figs/03-STATS/StressAll_{scale}_{side}_{int(x_c*100)}.pdf',
                             **figkw
@@ -415,9 +420,7 @@ def Visual_Mean_Vel_youter_NOROTAT():
 
 if __name__ == "__main__":
     # Visual_Mean_Vel()
-    # Visual_Mean_Vel_youter()
-    Visual_Mean_Vel_youter_NOROTAT()
 
-    # Visual_Reynolds_Stress()
-    
     # Visual_Reynolds_Stress_All()
+    Visual_Mean_Vel_youter()
+    Visual_Mean_Vel_youter_NOROTAT()
