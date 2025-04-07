@@ -366,6 +366,70 @@ var_name_dict={
                           }
                           },
               
+              'Ue':{"name":            r"$U_e$",
+                          "axs":{
+                            'xlabel':r'$x/c$',
+                            # "xlim":[0.11,0.95],
+                            'ylabel':r'$U_e$',
+                          }
+                          },
+              
+              'd99':{"name":            r"$\delta_{99}$",
+                          "axs":{
+                            'xlabel':r'$x/c$',
+                            # "xlim":[0.11,0.95],
+                            'ylabel':r'$\delta_{99}$',
+                            'yscale':'log'
+                          }
+                          },
+              
+
+              'L':{"name": r"$f_l$",
+                          "axs":{
+                            'xlabel':r'$x/c$',
+                            'ylabel':r'$f_l = f_{l,x} + f_{l_y}$',
+                            # 'yscale':'symlog',
+                          },
+                          },
+              
+              'L_tauw':{"name": r"$f_{l,x}$",
+                          "axs":{
+                            'xlabel':r'$x/c$',
+                            'ylabel':r'$f_{l,x}$',
+                            # 'yscale':'symlog',
+                          },
+                          },
+              
+              'L_p':{"name": r"$f_{l,y}$",
+                          "axs":{
+                            'xlabel':r'$x/c$',
+                            'ylabel':r'$f_{l,y}$',
+                            # 'yscale':'log',
+                          },
+                          },
+
+              'D':{"name": r"$f_d$",
+                          "axs":{
+                            'xlabel':r'$x/c$',
+                            'ylabel':r'$f_d=f_{d,x}+f_{d,y}$',
+                          },
+                          },
+              
+              'D_tauw':{"name": r"$f_{d,x}$",
+                          "axs":{
+                            'xlabel':r'$x/c$',
+                            'ylabel':r'$f_{d,x}$',
+                          },
+                          },
+              
+              'D_p':{"name": r"$f_{d,y}$",
+                          "axs":{
+                            'xlabel':r'$x/c$',
+                            'ylabel':r'$f_{d,y}$',
+                          },
+                          },
+              
+
               "psd":{'name': "Time-PSD",
                     
                     'axs':{

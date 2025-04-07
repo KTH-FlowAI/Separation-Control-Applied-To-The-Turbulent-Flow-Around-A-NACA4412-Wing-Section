@@ -252,6 +252,8 @@ VarList =[
           'Retheta',
           "Retau",
           "H12",
+          "Ue",
+          "d99",
           ]
 
 for il, var in enumerate(VarList):
