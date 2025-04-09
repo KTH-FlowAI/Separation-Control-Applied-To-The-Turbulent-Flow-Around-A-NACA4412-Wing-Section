@@ -184,6 +184,15 @@ control_region_cfg2 = {
 #------------------------------------------
 # Integral quantities Lift and drag forces as well as theirs decomposition 
 #------------------------------------------
+single_fig_cfg = {
+                'ncols':1,
+                'nrows':1,
+                'figsize':(8.5,7.5)
+                  }
+
+
+
+
 def Plot_lift_force():
   ##### Lift force and its decomposition ######
   fig,axs = plt.subplots(**single_fig_cfg)
@@ -262,20 +271,18 @@ def Plot_lift_force():
                           borderaxespad=0,
                           ncol=len(legend_list)//3, 
                           frameon=False,
-                          prop={"size":13.5}
+                          prop={"size":14.5}
                           )
   # axs.axhline(0,**support_line1)
   fig.savefig(f'Figs/05-Suply/L_distribute.jpg',
-                **{'dpi':300,'bbox_inches':'tight'}
+                **{'dpi':300,}
                 )
   fig.savefig(f'Figs/05-Suply/L_distribute.pdf',
-                **{'dpi':300,'bbox_inches':'tight'}
+                **{'dpi':300,}
                 )
 
-  ##### Lift force and its decomposition ######
-  fig,axs = plt.subplots(**single_fig_cfg)
-
 def Plot_drag_force():
+  plt_setUp_Smaller()
   ##### Lift force and its decomposition ######
   fig,axs = plt.subplots(**single_fig_cfg)
   axins = inset_axes(axs, 
@@ -354,18 +361,15 @@ def Plot_drag_force():
                           borderaxespad=0,
                           ncol=len(legend_list)//3, 
                           frameon=False,
-                          prop={"size":13.5}
+                          prop={"size":14.5}
                           )
   # axs.axhline(0,**support_line1)
   fig.savefig(f'Figs/05-Suply/D_distribute.jpg',
-                **{'dpi':300,'bbox_inches':'tight'}
+                **{'dpi':300,}
                 )
   fig.savefig(f'Figs/05-Suply/D_distribute.pdf',
-                **{'dpi':300,'bbox_inches':'tight'}
+                **{'dpi':300,}
                 )
-
-  ##### Lift force and its decomposition ######
-  fig,axs = plt.subplots(**single_fig_cfg)
 
 if __name__ == "__main__":
   Plot_drag_force()

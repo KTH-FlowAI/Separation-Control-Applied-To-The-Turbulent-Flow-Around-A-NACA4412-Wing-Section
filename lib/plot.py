@@ -202,10 +202,10 @@ var_name_dict={
               
               'Uouter_y':{"name":r"$U_t/U_e$",
                     'axs':{
-                        'xlabel':r'$y_n/\delta_{99}$',
+                        'xlabel':r'$y_n$',
                         # 'xscale':"log",
                         # "xlim":[1.0,1200],
-                        'ylabel':r'$U_t/U_e$',
+                        'ylabel':r'$U_t$',
                           },
                   },
               
@@ -395,48 +395,48 @@ var_name_dict={
                           },
               
 
-              'L':{"name": r"$f_l$",
+              'L':{"name": r"$\Gamma_l$",
                           "axs":{
-                            'xlabel':r'$x/c$',
-                            'ylabel':r'$f_l = f_{l,x} + f_{l_y}$',
+                            'xlabel':r"$x/c$",
+                            'ylabel':r"$\Gamma_l = \Gamma_{l,\tau_w} + \Gamma_{l,(p-p_0)}$",
                             # 'yscale':'symlog',
                           },
                           },
               
-              'L_tauw':{"name": r"$f_{l,x}$",
+              'L_tauw':{"name": r"$\Gamma_{l,\tau_w}$",
                           "axs":{
-                            'xlabel':r'$x/c$',
-                            'ylabel':r'$f_{l,x}$',
+                            'xlabel':r"$x/c$",
+                            'ylabel':r"$f'_{l,x}$",
                             # 'yscale':'symlog',
                           },
                           },
               
-              'L_p':{"name": r"$f_{l,y}$",
+              'L_p':{"name": r"$\Gamma_{l,(p-p_0)}$",
                           "axs":{
-                            'xlabel':r'$x/c$',
-                            'ylabel':r'$f_{l,y}$',
+                            'xlabel':r"$x/c$",
+                            'ylabel':r"$f'_{l,y}$",
                             # 'yscale':'log',
                           },
                           },
 
-              'D':{"name": r"$f_d$",
+              'D':{"name": r"$\Gamma_d$",
                           "axs":{
-                            'xlabel':r'$x/c$',
-                            'ylabel':r'$f_d=f_{d,x}+f_{d,y}$',
+                            'xlabel':r"$x/c$",
+                            'ylabel':r"$\Gamma_d=\Gamma_{d,\tau_w}+\Gamma_{d,(p-p_0)}$",
                           },
                           },
               
-              'D_tauw':{"name": r"$f_{d,x}$",
+              'D_tauw':{"name": r"$\Gamma_{d,\tau_w}$",
                           "axs":{
-                            'xlabel':r'$x/c$',
-                            'ylabel':r'$f_{d,x}$',
+                            'xlabel':r"$x/c$",
+                            'ylabel':r"$f'_{d,x}$",
                           },
                           },
               
-              'D_p':{"name": r"$f_{d,y}$",
+              'D_p':{"name": r"$\Gamma_{d,(p-p_0)}$",
                           "axs":{
-                            'xlabel':r'$x/c$',
-                            'ylabel':r'$f_{d,y}$',
+                            'xlabel':r"$x/c$",
+                            'ylabel':r"$f'_{d,y}$",
                           },
                           },
               
@@ -498,15 +498,13 @@ def plot_Vel(d,fig,axs,x_c,var,
     Ue  = d['Ue'][0,idx]
     lstar = d['lstar'][0,idx]
     lstar = d['d99'][0,idx]
-    axs.plot(d['yn'][idx,:]/lstar,d[var][idx,:]/Ue,
+    print(f"Ue = {Ue}, d99={lstar}")
+    axs.plot(d['yn'][idx,:],d[var][idx,:],
             **style,
             markevery=interval)
   
   elif scale == 'outer_norotate':
-    Ue  = d['Ue'][0,idx]
-    lstar = d['lstar'][0,idx]
-    lstar = d['d99'][0,idx]
-    axs.plot(d['yn'][idx,:],d[var][idx,:],
+    axs.plot(d['y'][idx,:],d[var][idx,:],
             **style,
             markevery=interval)
   

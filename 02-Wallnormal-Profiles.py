@@ -164,12 +164,6 @@ def Visual_Reynolds_Stress_All():
     # figs_cfg = {'nrows':2,'ncols':2,'figsize':(16,14)}
     figs_cfg = {'nrows':1,'ncols':1,'figsize':(8,8)}
     # fig,axss = plt.subplots(**figs_cfg)
-
-
-    ## Inspection of axess 
-
-
-
     for jl, scale in enumerate(scales):
         for il, side in enumerate(sides): 
             legend_list = []
@@ -380,18 +374,29 @@ def Visual_Mean_Vel_youter_NOROTAT():
                     Ut = data[case_name][f'data_{side}']["U"][idx,:]
                     Vn = data[case_name][f'data_{side}']["V"][idx,:]
                     theta = interp_dict[f'func_{side}'](x_c)
-                    print(f'Angle={theta} at x/c={x_c}')
+                    # theta *= -1
+                    # print(f'Angle={theta} at x/c={x_c}')
 
                     data[case_name][f'data_{side}']['Uouter_norotate'] = deepcopy(data[case_name][f'data_{side}']["U"])
 
-                    data[case_name][f'data_{side}']['Uouter_norotate'][idx,:] = Ut * np.sin(theta) + \
-                                                                        Vn * np.cos(theta)
-                    print(data[case_name][f'data_{side}']['Uouter_norotate'][idx,:])
+                    data[case_name][f'data_{side}']['Uouter_norotate'][idx,:] = Ut * np.cos(theta) - Vn * np.sin(theta)
+                    
+
+                    # data[case_name][f'data_{side}']['Uouter_norotate'][idx,:] =Vn * np.cos(theta)
+                    
+                    # print(data[case_name][f'data_{side}']['Uouter_norotate'][idx,:])
+                    fig,axs = plot_Vel(data[case_name][f'data_{side}'],
+                                    fig,axs,x_c,var+scale,var_Name,
+                                    data[case_name]['style'],
+                                    grid_setup,
+                                    scale=scale)
+                    
                     fig,axs = plot_Vel(data[case_name][f'data_{side}'],
                                     fig,axs,x_c,var,var_Name,
                                     data[case_name]['style'],
                                     grid_setup,
                                     scale=scale)
+                    
                     # legend_list.append(data[case_name]['label'])
                     legend_list.append(Line2D([0],[0],
                             **data[case_name]['style'],
