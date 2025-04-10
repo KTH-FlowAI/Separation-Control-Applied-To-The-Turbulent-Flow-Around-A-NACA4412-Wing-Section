@@ -338,10 +338,10 @@ for il, var in enumerate(VarList):
                         prop={"size":14}
                         )
   fig.savefig(f'Figs/02-BL-DEVELP/BL_{var}.jpg',
-                  **{'dpi':300,}
+                  **{'dpi':300,'transparent':True}
                   )
   fig.savefig(f'Figs/02-BL-DEVELP/BL_{var}.pdf',
-                    **{'dpi':300,}
+                    **{'dpi':300,'transparent':True}
                     )
 
 

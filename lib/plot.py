@@ -82,6 +82,10 @@ formatter3 = ticker.ScalarFormatter(useMathText=True,
                                     useLocale=True)
 formatter3.set_powerlimits([-2,4])
 
+formatter4 = ticker.ScalarFormatter(useMathText=True,
+                                    useLocale=True)
+formatter4.set_powerlimits([0,2])
+
 # formatter3 = ticker.ScalarFormatter(useMathText=True,
 #                                     useLocale=True)
 # formatter3.set_powerlimits([-3,4])
@@ -206,6 +210,8 @@ var_name_dict={
                         # 'xscale':"log",
                         # "xlim":[1.0,1200],
                         'ylabel':r'$U_t$',
+                        'xlim':[-0.0005,0.002],
+                        'ylim':[-0.15,0.05],
                           },
                   },
               
@@ -215,6 +221,8 @@ var_name_dict={
                         # 'xscale':"log",
                         # "xlim":[1.0,1200],
                         'ylabel':r'$U$',
+                        'xlim':[0.1380,0.1405],
+                        'ylim':[-0.15,0.1],
                           },
                   },
 
@@ -398,12 +406,12 @@ var_name_dict={
               'L':{"name": r"$\Gamma_l$",
                           "axs":{
                             'xlabel':r"$x/c$",
-                            'ylabel':r"$\Gamma_l = \Gamma_{l,\tau_w} + \Gamma_{l,(p-p_0)}$",
+                            'ylabel':r"$\Gamma_l = \Gamma_{l,f} + \Gamma_{l,p}$",
                             # 'yscale':'symlog',
                           },
                           },
               
-              'L_tauw':{"name": r"$\Gamma_{l,\tau_w}$",
+              'L_tauw':{"name": r"$\Gamma_{l,f}$",
                           "axs":{
                             'xlabel':r"$x/c$",
                             'ylabel':r"$f'_{l,x}$",
@@ -411,7 +419,7 @@ var_name_dict={
                           },
                           },
               
-              'L_p':{"name": r"$\Gamma_{l,(p-p_0)}$",
+              'L_p':{"name": r"$\Gamma_{l,p}$",
                           "axs":{
                             'xlabel':r"$x/c$",
                             'ylabel':r"$f'_{l,y}$",
@@ -422,18 +430,18 @@ var_name_dict={
               'D':{"name": r"$\Gamma_d$",
                           "axs":{
                             'xlabel':r"$x/c$",
-                            'ylabel':r"$\Gamma_d=\Gamma_{d,\tau_w}+\Gamma_{d,(p-p_0)}$",
+                            'ylabel':r"$\Gamma_d=\Gamma_{d,f}+\Gamma_{d,p}$",
                           },
                           },
               
-              'D_tauw':{"name": r"$\Gamma_{d,\tau_w}$",
+              'D_tauw':{"name": r"$\Gamma_{d,f}$",
                           "axs":{
                             'xlabel':r"$x/c$",
                             'ylabel':r"$f'_{d,x}$",
                           },
                           },
               
-              'D_p':{"name": r"$\Gamma_{d,(p-p_0)}$",
+              'D_p':{"name": r"$\Gamma_{d,p}$",
                           "axs":{
                             'xlabel':r"$x/c$",
                             'ylabel':r"$f'_{d,y}$",

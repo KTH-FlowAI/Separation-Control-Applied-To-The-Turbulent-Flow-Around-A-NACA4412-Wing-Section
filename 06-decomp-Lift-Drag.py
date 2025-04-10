@@ -262,6 +262,9 @@ def Plot_lift_force():
   axs.yaxis.set_major_formatter(formatter2)
   axs.grid(**grid_setup)
   axs.axvspan(**control_region_cfg)
+  # axs.axhline(0,**support_line1)
+  # axins.axhline(0,**support_line1)
+
   axs.legend(handles=legend_list,
               loc='upper center', 
                           # bbox_to_anchor=(1.0, 0.85, 
@@ -275,10 +278,10 @@ def Plot_lift_force():
                           )
   # axs.axhline(0,**support_line1)
   fig.savefig(f'Figs/05-Suply/L_distribute.jpg',
-                **{'dpi':300,}
+                **{'dpi':300,'transparent':True}
                 )
   fig.savefig(f'Figs/05-Suply/L_distribute.pdf',
-                **{'dpi':300,}
+                **{'dpi':300,'transparent':True}
                 )
 
 def Plot_drag_force():
@@ -352,6 +355,8 @@ def Plot_drag_force():
   axs.yaxis.set_major_formatter(formatter2)
   axs.grid(**grid_setup)
   axs.axvspan(**control_region_cfg)
+  # axs.axhline(0,**support_line1)
+  # axins.axhline(0,**support_line1)
   axs.legend(handles=legend_list,
               loc='upper center', 
                           # bbox_to_anchor=(1.0, 0.85, 
@@ -365,10 +370,10 @@ def Plot_drag_force():
                           )
   # axs.axhline(0,**support_line1)
   fig.savefig(f'Figs/05-Suply/D_distribute.jpg',
-                **{'dpi':300,}
+                **{'dpi':300,'transparent':True}
                 )
   fig.savefig(f'Figs/05-Suply/D_distribute.pdf',
-                **{'dpi':300,}
+                **{'dpi':300,'transparent':True}
                 )
 
 if __name__ == "__main__":

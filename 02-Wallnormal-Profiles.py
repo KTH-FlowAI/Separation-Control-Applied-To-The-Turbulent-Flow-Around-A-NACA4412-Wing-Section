@@ -94,10 +94,10 @@ def Visual_Mean_Vel():
                                             prop={"size":14}
                                             )
                 fig.savefig(f'Figs/03-STATS/{var}_{scale}_{side}_{int(x_c*100)}.jpg',
-                                **{'dpi':300,}
+                                **{'dpi':300,'transparent':True}
                                 )
                 fig.savefig(f'Figs/03-STATS/{var}_{scale}_{side}_{int(x_c*100)}.pdf',
-                                **{'dpi':300,}
+                                **{'dpi':300,'transparent':True}
                                 )
                 
                 plt.clf()
@@ -268,7 +268,7 @@ def Visual_Reynolds_Stress_All():
 
 
 def Visual_Mean_Vel_youter():
-    figs_cfg = {'nrows':1,'ncols':1,'figsize':(8.,8.)}
+    figs_cfg = {'nrows':1,'ncols':1,'figsize':(9,9)}
     VarList =['U']
     AlphaList = [["(a)","(b)"],["(c)","(d)"],]
     scales=['outer_y']
@@ -286,7 +286,9 @@ def Visual_Mean_Vel_youter():
                                     fig,axs,x_c,var,var_Name,
                                     data[case_name]['style'],
                                     grid_setup,
-                                    scale=scale)
+                                    scale=scale,
+                                    # interval=50
+                                    )
                     # legend_list.append(data[case_name]['label'])
                     legend_list.append(Line2D([0],[0],
                             **data[case_name]['style'],
@@ -301,6 +303,11 @@ def Visual_Mean_Vel_youter():
                                             frameon=False,
                                             prop={"size":14}
                                             )
+                axs.axhline(0,**support_line1)
+                
+                axs.yaxis.set_major_formatter(formatter4)
+                axs.xaxis.set_major_formatter(formatter2)
+                
                 fig.savefig(f'Figs/05-Suply/{var}_{scale}_{side}_{int(x_c*100)}.jpg',
                                 **figkw
                                 )
@@ -352,7 +359,7 @@ def Visual_Mean_Vel_youter_NOROTAT():
 
 
 
-    figs_cfg = {'nrows':1,'ncols':1,'figsize':(8.,8.)}
+    figs_cfg = {'nrows':1,'ncols':1,'figsize':(9,9)}
     VarList =['U']
     AlphaList = [["(a)","(b)"],["(c)","(d)"],]
     scales=['outer_norotate']
@@ -389,13 +396,16 @@ def Visual_Mean_Vel_youter_NOROTAT():
                                     fig,axs,x_c,var+scale,var_Name,
                                     data[case_name]['style'],
                                     grid_setup,
-                                    scale=scale)
+                                    scale=scale,
+                                    
+                                    )
                     
                     fig,axs = plot_Vel(data[case_name][f'data_{side}'],
                                     fig,axs,x_c,var,var_Name,
                                     data[case_name]['style'],
                                     grid_setup,
-                                    scale=scale)
+                                    scale=scale,
+                                    )
                     
                     # legend_list.append(data[case_name]['label'])
                     legend_list.append(Line2D([0],[0],
@@ -411,6 +421,10 @@ def Visual_Mean_Vel_youter_NOROTAT():
                                             frameon=False,
                                             prop={"size":14}
                                             )
+                # axs.xaxis.set_minor_formatter(NullFormatter())
+                axs.yaxis.set_major_formatter(formatter4)
+                axs.xaxis.set_major_formatter(formatter2)
+                axs.axhline(0,**support_line1)
                 fig.savefig(f'Figs/05-Suply/{var}_{scale}_{side}_{int(x_c*100)}.jpg',
                                 **figkw
                                 )
