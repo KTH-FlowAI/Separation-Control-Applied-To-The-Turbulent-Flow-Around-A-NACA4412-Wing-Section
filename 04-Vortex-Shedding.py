@@ -66,8 +66,8 @@ Vars = ['U',
         "P"
         ]
 var_name = {
-              'U':r'${\rm PSD}(u_t)$',
-              'V':r'${\rm PSD}(v_n)$',
+              'U':r'${\rm PSD}(u)$',
+              'V':r'${\rm PSD}(v)$',
               'P':r"${\rm PSD}(p)$",
             }
 
