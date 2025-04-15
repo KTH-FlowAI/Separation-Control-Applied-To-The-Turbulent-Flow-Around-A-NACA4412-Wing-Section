@@ -89,12 +89,12 @@ legend_list.append(Line2D([0],[0],
                         color=cc.grays,
                         linestyle="-",
                         linewidth=3.0,
-                        label="S.S"))
+                        label="SS"))
 legend_list.append(Line2D([0],[0],
                         color=cc.grays,
                         linestyle="--",
                         linewidth=3.0,
-                        label="P.S"))
+                        label="PS"))
 
 for case_name in data.keys():
   legend_list.append(Rectangle(xy=(1, 0), width=3, height=3,
@@ -317,12 +317,12 @@ for il, var in enumerate(VarList):
                             color=cc.grays,
                             linestyle="-",
                             linewidth=3.0,
-                            label="S.S"))
+                            label="SS"))
   legend_list.append(Line2D([0],[0],
                             color=cc.grays,
                             linestyle="--",
                             linewidth=3.0,
-                            label="P.S"))
+                            label="PS"))
 
   for case_name in data.keys():
     legend_list.append(Rectangle(xy=(1, 0), width=3, height=3,
