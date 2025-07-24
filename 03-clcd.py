@@ -3,10 +3,9 @@ Check the ClCd
 @yuningw
 """
 import matplotlib.pyplot as plt
-import struct
+import struct,os
 import numpy as np
 import pandas as pd
-from   tqdm import tqdm
 from   scipy import io as sio
 from   scipy.interpolate import interp1d
 from   scipy.integrate import quad
@@ -18,8 +17,11 @@ Rec = 200
 fldr='./database/stsdata/' 
 sides = ['SS',"PS"]
 plt_setUp_Smaller()
-
 data = data_clcd
+
+os.makedirs('Figs',exist_ok=True)
+os.makedirs('Figs/01-CTRL-EFFECT',exist_ok=True)
+
 
 def rel_modif(g,p,positive=True):
   """

@@ -1,8 +1,7 @@
 import matplotlib.pyplot as plt
-import struct
+import struct,os
 import numpy as np
 import pandas as pd
-from   tqdm import tqdm
 from   scipy import io as sio
 from   scipy.interpolate import interp1d
 from   scipy.integrate import quad
@@ -33,6 +32,8 @@ AOA = 11
 Rec = 200
 fldr='./database/tsrs/002-SP-1D/' 
 save_dir = 'Figs/04-FFT/'
+os.makedirs("Figs",exist_ok=True)
+os.makedirs(save_dir,exist_ok=True)
 sides = ['SS',"PS"]
 AlphaList = [['(a)',"(b)","(c)","(d)"],["(e)","(f)","(g)","(h)"]]
 

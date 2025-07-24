@@ -4,10 +4,9 @@ Visualisation of the turbulence statistics
 """
 
 import matplotlib.pyplot as plt
-import struct
+import struct,os
 import numpy as np
 import pandas as pd
-from   tqdm import tqdm
 from   scipy import io as sio
 from   scipy.interpolate import interp1d
 from   scipy.integrate import quad
@@ -21,14 +20,15 @@ parser.add_argument('--s',default="SS",type=str)
 args = parser.parse_args()
 plt_setUp_Smaller()
 
-
-# data = data_clcd
-
 AOA = 11 
 Rec = 200
 fldr='./database/stsdata/' 
 sides = ['SS',"PS"]
 AlphaList = [['(a)',"(b)","(c)","(d)"],["(e)","(f)","(g)","(h)"]]
+
+
+os.makedirs('Figs',exist_ok=True)
+os.makedirs('Figs/03-STATS',exist_ok=True)
 
 
 #######################################
@@ -107,9 +107,7 @@ def Visual_Mean_Vel():
 Reynolds Stresses profiles 
 """
 def Visual_Reynolds_Stress():
-    VarList =['uu',
-            #   "vv",'ww','uv',
-              ]
+    VarList =['uu',"vv",'ww','uv',]
     scales=['inner','outer']
     AlphaList = [["(a)","(b)"],["(c)","(d)"],]
     

@@ -3,10 +3,9 @@ Visualisation of the profiles
 @yuningw
 """
 import matplotlib.pyplot as plt
-import struct
+import struct,os
 import numpy as np
 import pandas as pd
-from   tqdm import tqdm
 from   scipy import io as sio
 from   scipy.interpolate import interp1d
 from   scipy.integrate import quad
@@ -20,6 +19,8 @@ parser.add_argument('--s',default="SS",type=str)
 args = parser.parse_args()
 plt_setUp_Smaller()
 
+os.makedirs('Figs',exist_ok=True)
+os.makedirs('Figs/02-BL-DEVELP',exist_ok=True)
 
 AOA = 11 
 Rec = 200
