@@ -15,7 +15,7 @@ from  lib.configs import *
 import argparse
 AOA = 11 
 Rec = 200
-fldr='../database/stsdata/' 
+fldr='./database/stsdata/' 
 sides = ['SS',"PS"]
 plt_setUp_Smaller()
 

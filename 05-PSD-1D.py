@@ -31,7 +31,7 @@ plt.rc("ytick",labelsize = 15)
 
 AOA = 11 
 Rec = 200
-fldr='../database/tsrs/002-SP-1D/' 
+fldr='./database/tsrs/002-SP-1D/' 
 save_dir = 'Figs/04-FFT/'
 sides = ['SS',"PS"]
 AlphaList = [['(a)',"(b)","(c)","(d)"],["(e)","(f)","(g)","(h)"]]

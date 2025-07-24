@@ -23,7 +23,7 @@ plt_setUp_Smaller()
 
 AOA = 11 
 Rec = 200
-fldr='../database/tsrs/001-shedding-data/' 
+fldr='./database/tsrs/001-shedding-data/' 
 save_dir = 'Figs/04-FFT/'
 sides = ['SS',"PS"]
 AlphaList = [['(a)',"(b)","(c)","(d)"],["(e)","(f)","(g)","(h)"]]

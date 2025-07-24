@@ -147,7 +147,7 @@ def lift_drag_distribute(data:dict,rho=1.0,Uinf=1.0):
 
 AOA = 11 
 Rec = 200
-fldr='../database/stsdata/' 
+fldr='./database/stsdata/' 
 sides = ['SS',"PS"]
 
 #######################################
