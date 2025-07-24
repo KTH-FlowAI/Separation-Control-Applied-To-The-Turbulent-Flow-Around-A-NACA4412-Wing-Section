@@ -222,13 +222,12 @@ for var in VarList:
     cf = data[case_name][f'data_{side}'][var].squeeze()
     xx = data[case_name][f'data_{side}']['xc'].squeeze()
     Cmu = data[case_name]["Cmu"]
-    
+
     if 'reference'in case_name:
-      ind = np.where((cf>0))[0][-1]-3
+      x_loc_sep = 0.14
     else:
       ind = np.where((cf>0))[0][-1]
-    
-    x_loc_sep = 0.99 - xx[ind]
+      x_loc_sep = 0.99 - xx[ind]
 
     style_dict = data[case_name]['style']
     labelName = data[case_name]['label']
