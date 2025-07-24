@@ -1,6 +1,9 @@
 # ! /bin/bash
-repo="origin"
-branchName="melbourne"
+repo="origin_kth"
+branchName="main"
+
+# repo="origin"
+# branchName="melbourne"
 
 echo "====================================="
 echo "           GITHUB UPDATE              "
