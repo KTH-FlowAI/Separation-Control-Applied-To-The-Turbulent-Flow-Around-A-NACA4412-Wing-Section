@@ -153,10 +153,6 @@ axs.axhline(df["cd_p"][0],linestyle='-.',color = cc.red)
 axs.axhline(df["cd"][0]     ,linestyle='-.',color = cc.red)
 axs.set_ylabel(r'$C_d = C_{d,f} + C_{d,p}$',fontsize = 20)
 axs.set_xlabel(r'CASE',fontsize = 20)
-# axs.legend(bbox_to_anchor=(1.0,0.5,0.0,0.5))
-# axs.legend(loc='upper left',ncol=2)
-# axs.set_title("(a)",**title_setup)
-
 fig.savefig('Figs/01-CTRL-EFFECT/cd_BAR.jpg',**figkw)
 fig.savefig('Figs/01-CTRL-EFFECT/cd_BAR.pdf',**figkw)
 
@@ -200,12 +196,9 @@ axs.legend(
   handles = legend_list,
   loc ='upper left',
   ncol = len(legend_list)//2,
-  # bbox_to_anchor=(1.,0.5,0.0,0.5),
   prop={'size':15}
   )
-# axs.set_title("(b)",**title_setup)
-# axs.grid(which='major')
-# fig.tight_layout()
+
 fig.savefig('Figs/01-CTRL-EFFECT/cl_VS_cd.jpg',**figkw)
 fig.savefig('Figs/01-CTRL-EFFECT/cl_VS_cd.pdf',**figkw)
 
@@ -222,14 +215,12 @@ for caseName in data.keys():
   data[caseName][f'data_{side}'] = sio.loadmat(fname)
   data[caseName][f'Cmu'] = cal_Cmu(data[caseName]['config'])
   print(f"[IO] DATA: {fname}")
-  # print(data[caseName]['data'].keys())
-  
+
+
 # We only Care about the suction side 
 VarList =['cf',]
 for var in VarList:
-  fig,axs = plt.subplots(**single_fig_smaller)
-  # axins = zoomed_inset_axes(axs,zoom=3,loc='lower center')
-  
+  fig,axs = plt.subplots(**single_fig_smaller)  
   x_c = 0.1
   var_Name = var_name_dict[var]
   legend_list=[]
@@ -237,9 +228,6 @@ for var in VarList:
     cf = data[case_name][f'data_{side}'][var].squeeze()
     xx = data[case_name][f'data_{side}']['xc'].squeeze()
     Cmu = data[case_name]["Cmu"]
-    # ind = np.where((cf>=0))[0][-1]-2
-    # cf -=1e-3
-    # ind = np.where((cf>=0))[0][-1]
     if 'reference'in case_name:
       ind = np.where((cf>0))[0][-1]-3
     else:
@@ -267,23 +255,15 @@ axs.set(**{
           'xlabel':r"$C_{\mu}$",
           "ylabel":r"$\ell_{\rm sep}$",
           'ylim':[-0.03,0.15],
-          # 'xlim':[-3e-5,3.5e-4],
           'xlim':[-1.5e-5,3e-4],
-          # 'xscale':'symlog'
-          # "title":"Separation Assessment " + f"($C_f < 0$)",
           })
 axs.legend(
         handles=legend_list,
         loc='upper right',
-        # ncol=len(legend_list)//2,
         prop={'size':15}
           )
-# axs.xaxis.set_major_locator(locmin)
-# axs.xaxis.set_ticks([0,1.0e-5,1e-4,3e-4])
 axs.xaxis.set_major_formatter(formatter2)
 axs.grid(**grid_setup)
-
-# axs.set_title("(c)",**title_setup)
 fig.savefig(f'Figs/01-CTRL-EFFECT/{side}_Separation_Points.jpg',
               **figkw
               )

@@ -355,8 +355,6 @@ def Plot_drag_force():
   axs.yaxis.set_major_formatter(formatter2)
   axs.grid(**grid_setup)
   axs.axvspan(**control_region_cfg)
-  # axs.axhline(0,**support_line1)
-  # axins.axhline(0,**support_line1)
   axs.legend(handles=legend_list,
               loc='upper center', 
                           # bbox_to_anchor=(1.0, 0.85, 

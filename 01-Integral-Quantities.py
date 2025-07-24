@@ -33,7 +33,6 @@ for caseName in data.keys():
     name = data[caseName]['fileName']
     fname= name_file(fldr,name,AOA,Rec,'SS')+'.mat'
     data[caseName]['data_SS'] = sio.loadmat(fname)
-    print(f"[IO] DATA: {fname}, {data[caseName]['data_SS'].keys()}")
     
     fname= name_file(fldr,name,AOA,Rec,'PS')+'.mat'
     data[caseName]['data_PS'] = sio.loadmat(fname)
@@ -160,9 +159,7 @@ fig.savefig(f'Figs/02-BL-DEVELP/cf_BothSides.pdf',
 
 ### ZOOM IN THE T.E For CF on S.S
 var = 'cp'
-# fig,axs = plt.subplots(**single_fig_larger)
 fig,axs = plt.subplots(**single_fig_cfg)
-# axs = axss[1]
 axins = inset_axes(axs,
                           width="200%", 
                           height="75%",
@@ -259,9 +256,6 @@ VarList =[
 for il, var in enumerate(VarList):
   fig,axs = plt.subplots(**single_fig_smaller)
   for jl, side in enumerate(sides): 
-  # fig,axss = plt.subplots(**quadra_fig_larger)
-    # axs=axss[il]
-    # fig,axs = plt.subplots(**single_fig_cfg)
     x_c = 0.16
     var_Name = var_name_dict[var]
     legend_list=[]

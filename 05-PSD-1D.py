@@ -59,15 +59,10 @@ def post_process_Spectra(out):
     
 
     data = {
-          'lmd_inner':lmd[1:]/lstar,
-          'yn_inner':yn/lstar,
-          
-        #   'lmd_outer':lmd[1:]/d99,
-        #   'yn_outer':yn/d99,
-
-          'puu':puu[:,1:],
-              }
-    
+        'lmd_inner':lmd[1:]/lstar,
+        'yn_inner':yn/lstar,
+        'puu':puu[:,1:],
+        }
     return data
 
 NPROF = args.prof 
@@ -80,13 +75,12 @@ for caseName in data.keys():
     name = data[caseName]['label']
     print(name)
     if 'Case' in name:
-      loc = name.find('e')
-      name = name[:loc+1]+name[-1]
+        loc = name.find('e')
+        name = name[:loc+1]+name[-1]
 
     fname= name_file(fldr,name,NPROF,VAR)
     print(fname)
     d = sio.loadmat(fname)
-    # d['d99'] = data[caseName]['d99']
     data[caseName][f'data'] = post_process_Spectra(d)
     print(f"[IO] DATA: {fname}")
 
@@ -134,7 +128,6 @@ legend_list.append(Line2D([0],[0],
                     lw  = 2, 
                     ls  = "-",
                     marker = "None",
-                    # markersize=12,
                     label='Spectra',)
                 )
 legend_list.reverse()
@@ -152,7 +145,6 @@ elif scale == "outer":
     axs.set(**{
         'xscale':'log',
         'xlabel':r'$\lambda_z/\delta_{99}$',
-        # 'xlim':[20,2000],
         'yscale':'log',    
         'ylabel':r'$y_n/\delta_{99}$',
         'ylim':[1e-3,1e0],

@@ -58,9 +58,6 @@ for caseName in data.keys():
         data[caseName][f'data_{nprof}_{var}'] = sio.loadmat(fname)
         print(f"[IO] DATA: {fname}")
 
-# data_ = data['control3'][f'data_{nprof}_{var}']
-# data['control3'][f'data_{nprof}_{var}']=data['control4'][f'data_{nprof}_{var}']
-# data['control4'][f'data_{nprof}_{var}']=data_
 Vars = ['U',
         
         "P"
@@ -71,11 +68,6 @@ var_name = {
               'P':r"${\rm PSD}(p)$",
             }
 
-# del data['control1']
-# del data['control2']
-
-# fig, axss = plt.subplots(2,2,figsize=(20,12))
-# AlphaList = [["(a)","(c)"],["(b)","(d)"],]
 for il, nprof in enumerate(Nprofs):
   for jl, var in enumerate(Vars):
     fig,axs=plt.subplots(**{'figsize':(8,4)})
@@ -84,7 +76,6 @@ for il, nprof in enumerate(Nprofs):
     for kl, caseName in enumerate(reversed(data.keys())):
       d = data[caseName][f'data_{nprof}_{var}']
       style_dict=data[caseName]['style']
-      # if ('control1' not in caseName) or ('control2' not in caseName):
       fig,axs=plot_FFT(d,fig,axs,style_dict,
                         text_loc=(0.99-kl*0.01,0.99-kl*0.15))
       legend_list.append(Rectangle(xy=(1, 0), width=3, height=3,

@@ -438,8 +438,5 @@ def Visual_Mean_Vel_youter_NOROTAT():
 
 
 if __name__ == "__main__":
-    # Visual_Mean_Vel()
-
-    # Visual_Reynolds_Stress_All()
-    Visual_Mean_Vel_youter()
-    Visual_Mean_Vel_youter_NOROTAT()
+    Visual_Mean_Vel()
+    Visual_Reynolds_Stress_All()
