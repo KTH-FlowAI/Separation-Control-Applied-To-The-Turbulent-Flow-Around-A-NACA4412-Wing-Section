@@ -7,7 +7,7 @@ This repository represents the database and visualization of results in paper ["
 ### DataBase
 Please download the database via [OneDrive-Link](https://kth-my.sharepoint.com/:f:/g/personal/yuningw_ug_kth_se/EvF_n6eeoy9NuK89F5Ipwg8BC5OomuGxYOcS6O029wRP7A?e=NAxKBy). The high-fidelity database is oversize for uploading to GitHub.
 
-Do not heisitate to contact the author if you encounter any issue with downloading or using the database.
+Do not hesitate to contact the author if you encounter any issue with downloading or using the database.
 
 After downloading, please move the database to the current directory and rename it as `database/`.
 
