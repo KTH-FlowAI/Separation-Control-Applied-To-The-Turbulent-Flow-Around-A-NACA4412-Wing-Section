@@ -94,9 +94,6 @@ for caseName in data.keys():
   label = data[caseName]['label']
   fname= name_file(fldr,name,AOA,Rec,side)+'.mat'
   data[caseName]['data'] = sio.loadmat(fname)
-  print(f"[IO] DATA: {fname}")
-  print(data[caseName]['data'].keys())
-  
   cl      = data[caseName]['data']['cl'][0][0]
   cd      = data[caseName]['data']['cd'][0][0]
   cd_tauw = data[caseName]['data']['cd_tauw'][0][0]
@@ -132,7 +129,6 @@ for caseName in data.keys():
 
 
 pd.DataFrame(df).to_csv('CLCD.csv',float_format="%.5f")
-pd.DataFrame(df).to_latex('CLCD.tex',float_format="%.5f")
 
 
 
@@ -144,7 +140,6 @@ df  =pd.read_csv('CLCD.csv')
 fig, axs = plt.subplots(1,1,figsize = (9,6))
 # axs = axss[0]
 caselist = [c[4:] if "Case" in c else c for c in df['Name']  ]
-print(caselist)
 bottom = np.zeros(shape=(len(caselist)))
 b1 = axs.bar(caselist,df['cd_p'],bottom=bottom,color = cc.gray,label=r'$C_{d,p}$')
 bottom += df['cd_p']
@@ -182,7 +177,7 @@ for il, case in enumerate(data.keys()):
                             markersize=12,
                             label=labelName
                                   ))
-# axs.xaxis.set_major_formatter(formatter2)
+
 axs.set(**{
           'xlabel':r"$C_d$",
           # 'xlim':[0.051,0.056],
@@ -214,7 +209,6 @@ for caseName in data.keys():
   fname= name_file(fldr,name,AOA,Rec,side)+'.mat'
   data[caseName][f'data_{side}'] = sio.loadmat(fname)
   data[caseName][f'Cmu'] = cal_Cmu(data[caseName]['config'])
-  print(f"[IO] DATA: {fname}")
 
 
 # We only Care about the suction side 
@@ -228,6 +222,7 @@ for var in VarList:
     cf = data[case_name][f'data_{side}'][var].squeeze()
     xx = data[case_name][f'data_{side}']['xc'].squeeze()
     Cmu = data[case_name]["Cmu"]
+    
     if 'reference'in case_name:
       ind = np.where((cf>0))[0][-1]-3
     else:
@@ -237,7 +232,6 @@ for var in VarList:
 
     style_dict = data[case_name]['style']
     labelName = data[case_name]['label']
-    print(f"{labelName}:\nMomentum Coeff: {Cmu} \t Sep Loc: {x_loc_sep}")
     axs.plot(Cmu,x_loc_sep,
             linestyle='none',
             marker=style_dict['marker'],

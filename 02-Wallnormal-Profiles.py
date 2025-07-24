@@ -79,7 +79,6 @@ def Visual_Mean_Vel():
                             label=data[case_name]['label']))
                     
                 axs.set(**var_name_dict[var+scale]['axs'])
-                # axs.set_title(AlphaList[il][jl] + " " + rf"$x/c={x_c}$"+", "+f"{side_text[side]}",**title_setup)
                 axs.xaxis.set_minor_locator(locmin)
                 axs.xaxis.set_major_locator(locmin)
                 axs.xaxis.set_minor_formatter(NullFormatter())
